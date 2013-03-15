@@ -1,0 +1,29 @@
+#!/bin/zsh
+ginit() {
+    git init;
+    git add ${*:-"."};
+    git commit -a -m "Initial Commit"
+}
+
+gst() {
+	if [[ "${vcs_info_msg_0_[2,3]}" == 'hg' ]]; then
+		hg status "$@"
+	else
+		git status "$@"
+	fi
+}
+
+gpl() {
+	if [[ "${vcs_info_msg_0_[2,3]}" == 'hg' ]]; then
+		hg pull "$@"
+	else
+		git pull "$@"
+	fi
+}
+
+alias gca="git commit -a"
+alias gcm="git commit"
+alias gco="git checkout"
+alias ga="git add"
+alias gap="git add --patch"
+alias gpu="git push"

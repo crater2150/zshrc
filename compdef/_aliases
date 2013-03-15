@@ -1,0 +1,3 @@
+#compdef aliases
+
+_files -W /etc/zsh/aliases/

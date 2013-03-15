@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+todo_count() {
+	if [ -n "$2" ]; then
+		file="--database $2"
+	else
+		file="-G"
+	fi
+	todo ${=file} -f +${1:-high} | wc -l
+}

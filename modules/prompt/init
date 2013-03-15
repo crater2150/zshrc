@@ -1,0 +1,130 @@
+#!/bin/zsh
+
+autoload -U colors && colors
+autoload -U promptinit
+
+PROMPT_UNICODE=${PROMPT_UNICODE:-yes}
+setopt prompt_subst
+
+
+if [[ "$PROMPT_UNICODE" = "yes" ]]; then
+	PVPREFIX="╼╢"
+	PVSUFFIX="╟╾"
+	PR_HBAR='─'
+	PR_VBAR='│'
+	CORNER_LU='╭'
+	CORNER_LD='╰'
+	CORNER_RU='╮'
+	CORNER_RD='╯'
+else
+	PVPREFIX="["
+	PVSUFFIX="]"
+	PR_HBAR='-'
+	PR_VBAR='|'
+fi
+
+
+# Show screen STY and tmux number
+sty () {
+	local sty=$?
+	echo -n "${SIG_PROMPT_PREFIX}"
+	echo -n "${STY:+"SCREEN:"}${(S)STY/#*./}${STY+" - "}"
+	echo -n "${TMUX:+"TMUX:"}${TMUX/*,/}${TMUX+" - "}"
+	echo -n "%y${SIG_PROMPT_SUFFIX}"
+}
+
+# show number of attached and detached screens
+screennum() {
+	local att
+	local det
+	local dead
+	if [ -x /usr/bin/screen ]; then
+		att=`screen -ls | grep -c Attached`
+		det=`screen -ls | grep -c Detached`
+		dead=`screen -ls | grep -c Dead `
+		echo "A:$att|D:$det|?:$dead"
+	fi
+}
+
+function prompt_precmd {
+	if mod_loaded vcs; then
+		vcs_info
+	fi
+	setprompt
+	RPS1='$usercolor◀%(?::$exitcolor${PVPREFIX})$(exitstatus)%(?::${PVSUFFIX})${stycolor}${PVPREFIX}$(sty)${rpscolor}${PVSUFFIX}${CORNER_RD}$reset'
+}
+
+precmd_hook prompt_precmd
+
+# Executed after a command has been read and is to be executed.
+function prompt_preexec {
+	# if running gnu screen, set the window name to the last run command
+	# FIXME any way to make this not change certain window titles (by window
+	# number or if a title isn't already set?)
+	if [[ "$TERM" =~ "screen" ]] \
+	&& [[ "$(tmux show -w au)" != "automatic-rename off" ]]; then
+		local CMD=${1[(wr)^(*=*|ssh|sudo|-*)]}
+		echo -ne "\ek$CMD\e\\"
+	fi
+}
+
+if mod_loaded todo; then
+	function todo_to_read_info() {
+		count=$(todo_count all ${TO_READ_FILE:-$HOME/.to_read})
+		if [ "$count" -gt 1 ]; then
+			echo -n "${PVPREFIX}${pathcolor}To read: $((count -1)) ${rpscolor}${PVSUFFIX}"
+		fi
+	}
+fi
+
+preexec_hook prompt_preexec
+
+function setprompt() {
+	local -a lines infoline middleline
+	local x i filler i_width
+
+	infoline+=( "${rpscolor}${CORNER_LU}" )
+
+	### First, assemble the top line
+	# Current dir
+	[[ -w $PWD ]] && infoline+=( ${pathcolor} ) || infoline+=( ${ropathcolor} )
+	infoline+=( "${PVPREFIX} %(5~|%-1~/.../|)%3~ ${PVSUFFIX}${rpscolor}${PR_HBAR}" )
+
+	# Username & host
+	infoline+=( "%(1j.${PVPREFIX} ${gitdirty}Jobs: %j${rpscolor} ${PVSUFFIX}.)" )
+	mod_loaded todo && infoline+=( "$(todo_to_read_info)" )
+	[ -n "${WTF_REST}" ] && infoline+=( "${WTF_REST_FORMATTED}" )
+	infoline+=( "${PVPREFIX} ${usercolor}%n${reset}@${hostcolor}%m${rpscolor} ${PVSUFFIX}" )
+
+	i_width=${(S)infoline//\%\{*\%\}} # search-and-replace color escapes
+	i_width=${(%)i_width} # expand all escapes and count the chars
+	i_width=${#i_width} # expand all escapes and count the chars
+
+	if [[ "$PROMPT_UNICODE" = "yes" ]]; then
+		filler="${rpscolor}${(l:$(( $COLUMNS - $i_width + 2))::─:)}"
+	else
+		filler="${rpscolor}${(l:$(( $COLUMNS - $i_width + 2))::-:)}"
+	fi
+	infoline[3]=( "${infoline[3]}${PR_HBAR}${filler}${PR_HBAR}" )
+	infoline+=( "${rpscolor}${CORNER_RU}" )
+
+	#middle info line
+
+	if mod_loaded vcs; then
+		middleline+=( "${rpscolor}${PR_VBAR} $(vcs_char) ${vcs_info_msg_0_}${reset}" )
+	fi
+
+	i_width=${(S)middleline//\%\{*\%\}} # search-and-replace color escapes
+	i_width=${#${(%)i_width}} # expand all escapes and count the chars
+	filler="${rpscolor}${(l:$(( $COLUMNS - $i_width - 2)):: :)}${reset}"
+
+	### Now, assemble all prompt lines
+	lines+=( ${(j::)infoline} )
+
+
+	[[ -n ${vcs_info_msg_0_} ]] && lines+=( "${middleline}${filler}${rpscolor}${PR_VBAR}" )
+	lines+=( "${CORNER_LD}${PVPREFIX} %(1j.${rpscolor}%j${reset} .)${usercolor}%#${reset} " )
+
+	### Finally, set the prompt
+	PROMPT=${(F)lines}
+}

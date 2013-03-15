@@ -1,0 +1,70 @@
+#compdef jpptodo
+
+typeset -A opt_args
+local context state line
+
+_jpp_find_todo_path() {
+	local todopath=$PWD
+	while true; do
+		[ -e "$todopath/TODO" ] && break;
+		[ "$todopath" = "/" ] && todopath=$PWD && break;
+		todopath=$(realpath "$todopath/..")
+	done
+	echo $todopath
+}
+
+_jpp_snums() {
+
+	local todopath=$(_jpp_find_todo_path)
+	[ -e "$todopath/TODO" ] || return;
+	_values -w 'S-Nummern' \
+		$(awk "$1"'{ printf "%s ", $1 }' $todopath/TODO)
+}
+
+_jpp_done() {
+	case "$state" in
+	arg2)
+		_values -w -s ' ' 'Aufgaben' \
+			'1[Model]' \
+			'2[Verwaltung]' \
+			'3[Import Export]' \
+			'4[Generierung]' \
+			'5[GUI]' \
+			'(1 2 3 4 5)all[Alle]'
+	;;
+	*)
+		_jpp_snums "/\s0\s/"
+	;;
+	esac
+}
+_jpptodo() {
+	_arguments "1:Commands:->commands" \
+		"2: :->arg1" \
+		"*: :->arg2" \
+	
+	case "$state" in
+	commands)
+		_arguments '1:Commands:(new done todo lock run unlock)'\
+			'-o[offline mode]' \
+			'-d[debug]'
+	;;
+	*)
+		case $words[2] in
+		lock)
+			_jpp_snums "/open$/"
+		;;
+		unlock)
+			_jpp_snums "!/open$/"
+		;;
+		done)
+			_jpp_done
+		;;
+		run)
+			_jpp_snums
+		;;
+		esac
+	;;
+	esac
+}
+
+_jpptodo "$@"

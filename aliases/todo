@@ -1,0 +1,33 @@
+TODOGIT="$HOME/.git/"
+
+.todo-git() {
+    if [[ "${PWD}" == "${HOME}" ]]; then
+        git --git-dir=$TODOGIT stash save todohomegit
+    fi
+
+    $*
+
+    if [[ "${PWD}" == "${HOME}" ]]; then
+        git --git-dir=$TODOGIT add .todo
+        git --git-dir=$TODOGIT commit -m todo
+        git --git-dir=$TODOGIT stash pop `git --git-dir=$TODOGIT stash list \
+		| grep todohomegit | grep -oe "^[^:]*"`
+    fi
+}
+
+tda() {
+    .todo-git =tda $*
+}
+
+tde() {
+    .todo-git =tde $*
+}
+
+tdr() {
+    .todo-git =tdr $*
+}
+
+tdd() {
+    .todo-git =tdd $*
+}
+

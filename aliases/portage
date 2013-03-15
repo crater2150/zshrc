@@ -1,0 +1,56 @@
+#!/bin/zsh
+
+alias eud="emerge -vabuDN -j4 --keep-going world"
+alias fetchlog="tail -f /var/log/emerge-fetch.log"
+alias emerge="sudo emerge"
+
+nolto() {
+	pkgenvconf $1 nolto nolto
+}
+
+notmpfs() {
+	pkgenvconf $1 notmpfs notmpfs
+}
+
+noaggressive() {
+	pkgenvconf $1 noaggressive noaggressive
+}
+
+nographite() {
+	pkgenvconf $1 nographite nographite
+}
+
+onlysafe() {
+	pkgenvconf $1 onlysafe onlysafe
+}
+
+cflags_reset() {
+	if [ -n "$1" ]; then
+		for i in \
+		  /etc/portage/package.env/noaggressive \
+		  /etc/portage/package.env/nographite \
+		  /etc/portage/package.env/nolto; do
+			  sed -i "/$1/d" $i;
+		done
+	fi
+}
+
+pkgenvconf() {
+	ltoline="$1 $2.conf"
+	echo -e '\e[1mInsert following line into package.env/'$2'?\e[0m'
+	echo "$ltoline"
+	echo "Looking for matching lines..."
+	grep $1 /etc/portage/package.env/$3
+	echo -e -n '\e[1m[y/n] \e[0m'
+	read answer
+	case "$answer" in
+		yes|y|YES|Yes|Really|"why not")
+	echo "$ltoline" | sudo tee -a /etc/portage/package.env/$3
+	;;
+	*) ;;
+	esac
+}
+
+
+alias eix="lesswrap /usr/bin/eix -F"
+

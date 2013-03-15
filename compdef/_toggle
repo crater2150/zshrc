@@ -1,0 +1,3 @@
+#compdef toggle
+
+_files -W /etc/init.d

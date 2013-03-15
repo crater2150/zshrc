@@ -1,0 +1,3 @@
+#compdef wvv
+
+_files -W ~/.config/wvv

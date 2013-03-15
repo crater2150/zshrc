@@ -1,0 +1,75 @@
+#!/bin/zsh
+
+autoload -U colors && colors
+
+. $MPATH/spectrum
+reset="%{${reset_color}%}"
+
+#
+# 256-color-term or rxvt with wrong tput output
+#
+if [[ "`tput colors`" == "256" ]] || [[ "`tput colors`" == "88" ]] ; then
+	pathcolor="%{${FG[27]}%}"
+	ropathcolor="%{${FG[92]}%}"
+
+	gitdirty="%{${FX[bold]}${FG[160]}%}"
+	gitstaged="%{${FX[bold]}${FG[34]}%}"
+	gitclean="%{${FG[240]}%}"
+	stycolor="%{${FG[240]}%}"
+	exitcolor=$gitdirty
+	rpscolor="%{${FG[238]}%}"
+	gituntracked="%{$FX[bold]$FG[253]%}●%{$reset$rpscolor%}"
+
+	local usercolor_base
+	if [ "$EUID" = "0" ] || [ "$USER" = "root" ] ; then
+		usercolor_base=196
+		usercolor_mod=30
+	else
+		usercolor_base=47
+		usercolor_mod=28
+
+	fi
+	if [ ! -z $SSH_CLIENT ]; then
+		usercolor_base=$((usercolor_base + usercolor_mod))
+		hostcolor="%{${FG[226]}%}"
+	else
+		hostcolor=$gitclean
+	fi
+	usercolor="%{${FX[bold]}${FG[$usercolor_base]}%}"
+	# 8-color-term
+	if [ -e /etc/DIR_COLORS_256 ] ; then
+		eval "$(dircolors /etc/DIR_COLORS_256)"
+	elif [ -e /etc/DIR_COLORS ]; then
+		eval "$(dircolors /etc/DIR_COLORS)"
+	fi
+else
+	pathcolor="%{$fg_bold[blue]}%}"
+
+	gitdirty="%{${fg[yellow]}%}"
+	gitstaged="%{${fg[green]}%}"
+	gitclean="%{$rightcolor%}"
+	vcs_revision="%{${fg[250]}%}"
+
+	exitcolor="%{$gitdirty%}"
+	rpscolor="%{$fg_bold[black]}%}"
+
+	if [ "$EUID" = "0" ] || [ "$USER" = "root" ] ; then
+		if [ ! -z $SSH_CLIENT ]; then
+			usercolor="%{${fg_bold[yellow]}%}"
+			hostcolor="%{${fg_no_bold[blue]}%}"
+		else
+			usercolor="%{${fg_bold[red]}%}"
+			hostcolor="%{${fg_bold[black]}%}"
+		fi
+	else
+		if [ ! -z $SSH_CLIENT ]; then
+			usercolor="%{${fg_bold[blue]}%}"
+			hostcolor="%{${fg_no_bold[blue]}%}"
+		else
+			usercolor="%{${fg_bold[green]}%}"
+			hostcolor="%{${fg_bold[black]}%}"
+		fi
+	fi
+
+	[ -e /etc/DIR_COLORS ] && eval "$(dircolors /etc/DIR_COLORS)"
+fi

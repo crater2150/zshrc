@@ -1,0 +1,3 @@
+#compdef pp
+
+_files -W /code/projects

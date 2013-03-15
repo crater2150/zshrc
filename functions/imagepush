@@ -1,0 +1,9 @@
+autoload -U zfinit && zfinit
+
+imagepush() {
+    zfopen "crater2150.de" "ftp33701-crimages" \\
+	    "$(gpg -d $HOME/.passwords/imagepush)"
+    zfcd /
+    zfput $* && echo "Transfer succesful"
+    zfclose
+}

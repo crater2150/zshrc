@@ -1,0 +1,12 @@
+#compdef awpman
+
+typeset -A opt_args
+local context state line
+
+confpath=${WPMANSETS:-~/.config/wpman}
+
+_arguments \
+    "1:Action:(load save)"\
+    "2:Setting File:_files -W $confpath" 
+#    "load:Setting File:_files -W $confpath" \
+#    "save:Setting File:_files -W $confpath" \

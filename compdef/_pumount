@@ -1,0 +1,3 @@
+#compdef pumount
+
+_files -W /media

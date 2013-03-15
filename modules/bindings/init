@@ -1,0 +1,50 @@
+#!/bin/zsh
+
+exit(){builtin exit;}
+zle -N q exit
+
+bindkey -M vicmd ! edit-command-line-tmux
+
+#unicode input
+autoload -U insert-unicode-char
+bindkey "u"  insert-unicode-char
+
+bindkey "^[[2~" yank                    # Insert
+bindkey "^[[3~" delete-char             # Del
+bindkey "^[[5~" history-beginning-search-backward  # PageUp
+bindkey "^[[6~" history-beginning-search-forward  # PageDown
+bindkey "^[e"   expand-cmd-path         # C-e for expanding path of typed command.
+bindkey "^[[A"  up-line-or-search       # Up arrow for back-history-search.
+bindkey "^[[B"  down-line-or-search     # Down arrow for fwd-history-search.
+bindkey " "     magic-space             # Do history expansion on space.
+case "$TERM" in
+	*xterm*|(dt|k)term)
+        bindkey ""    backward-delete-char   #backspace
+        bindkey ""    backward-delete-word   #C-backspace
+		bindkey "OH"  beginning-of-line       # Pos1
+		bindkey "OF"  end-of-line             # End
+		bindkey "^[[7~" beginning-of-line       # Pos1
+		bindkey "^[[8~" end-of-line             # End
+	;;
+	rxvt*|Eterm)
+		bindkey "^[[7~" beginning-of-line       # Pos1
+		bindkey "^[[8~" end-of-line             # End
+        bindkey ""    backward-delete-char   #backspace
+        bindkey ""    backward-delete-word   #C-backspace
+	;;
+	linux|screen*)
+		bindkey "[1~" beginning-of-line       # Pos1
+		bindkey "[4~" end-of-line             # End
+		bindkey "OD" vi-backward-blank-word
+		bindkey "OC" vi-forward-blank-word
+        bindkey ""    backward-delete-char   #backspace
+        bindkey ""    backward-delete-word   #C-backspace
+	;;
+esac
+bindkey "OA" up-line-or-history
+bindkey "OB" down-line-or-history
+bindkey "[1;5D" vi-backward-blank-word
+bindkey "[1;5C" vi-forward-blank-word
+#bindkey . rationalise-dot
+
+bindkey "" push-line-or-edit

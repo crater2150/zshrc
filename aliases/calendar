@@ -1,0 +1,63 @@
+#!/bin/zsh
+
+
+padd() {
+    local calendar desc date sel calfile i
+    zparseopts -E -D    c:=calendar -cal:=calendar \
+                        d:=date -date:=date
+    if [ -z "$date" ]; then
+        echo -n "Enter date: ";
+        read date;
+    fi
+
+    if [ -z "$calendar" ]; then
+        if [ -z "$sel" -o "$sel" -eq 0 ]; then
+            i=1
+            list=()
+            for calfile in ~/.pal/*.pal; do
+                echo \($i\)${calfile:t:r}
+                list+=($calfile)
+                ((i=$i+1))
+            done;
+            echo -n "select calendar: "
+            read sel
+            if [ -z $sel -o $sel -eq 0 ]; then
+                echo "Invalid selection! Try again:"
+            fi
+        fi
+        calendar=${list[$sel]}
+    fi
+
+    if [ -z "$*" ]; then
+        echo "Enter description: ";
+        read desc;
+    else
+        desc=$*;
+    fi
+
+    echo ${date[2]} $desc >> $calendar
+}
+
+ptda() {
+    local prio sel calfile i
+    zparseopts -E -D    p:=prio -priority:=prio \
+
+    if [ -z "$prio" ]; then
+        if [ -z "$sel" -o "$sel" -eq 0 ]; then
+            i=1
+            list=()
+            for calfile in ~/.pal/todo*.pal; do
+                echo \($i\)${${calfile:t:r}/todo_/}
+                list+=($calfile)
+                ((i=$i+1))
+            done;
+            echo -n "select priority: " 
+            read sel
+            if [ -z $sel -o $sel -eq 0 ]; then
+                echo "Invalid selection! Try again:"
+            fi
+        fi
+        prio=${list[$sel]}
+    fi
+    padd -d TODO -c $prio $*
+}

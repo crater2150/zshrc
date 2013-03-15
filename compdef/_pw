@@ -1,0 +1,3 @@
+#compdef pw
+
+_files -W /www/ -/

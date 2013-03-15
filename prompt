@@ -1,0 +1,301 @@
+#!/bin/zsh
+# Best Goddamn zsh prompt in the whole world.
+# Author: Seth House <seth@eseth.com>
+
+PROMPT_UNICODE=${PROMPT_UNICODE:-yes}
+setopt prompt_subst
+
+
+autoload -U colors && colors
+autoload -U promptinit
+autoload -Uz vcs_info
+
+
+local reset 
+reset="%{${reset_color}%}"
+
+#=================================================================256-color-term
+if [[ "`tput colors`" == "256" ]] || [[ "`tput colors`" == "88" ]] ; then
+		pathcolor="%{${FG[27]}%}"
+		ropathcolor="%{${FG[92]}%}"
+
+		gitdirty="%{${FX[bold]}${FG[160]}%}"
+		gitstaged="%{${FX[bold]}${FG[34]}%}"
+		gitclean="%{${FG[240]}%}"
+		stycolor="%{${FG[240]}%}"
+		exitcolor=$gitdirty
+		rpscolor="%{${FG[238]}%}"
+		gituntracked="%{$FX[bold]$FG[253]%}●%{$reset$rpscolor%}"
+
+		local ucnum
+		if [ "$EUID" = "0" ] || [ "$USER" = "root" ] ; then
+			ucnum=196
+		else
+			ucnum=47
+		fi
+		if [ ! -z $SSH_CLIENT ]; then
+			ucnum=$((ucnum + 3))
+			hostcolor="%{${FG[226]}%}"
+		else
+			hostcolor=$gitclean
+		fi
+		usercolor="%{${FX[bold]}${FG[$ucnum]}%}"
+#===================================================================8-color-term
+else
+		pathcolor="%{$fg_bold[blue]}%}"
+
+		gitdirty="%{${fg[yellow]}%}"
+		gitstaged="%{${fg[green]}%}"
+		gitclean="%{$rightcolor%}"
+		vcs_revision="%{${fg[250]}%}"
+
+		exitcolor="%{$gitdirty%}"
+		rpscolor="%{$fg_bold[black]}%}"
+
+		if [ "$EUID" = "0" ] || [ "$USER" = "root" ] ; then
+			if [ ! -z $SSH_CLIENT ]; then
+				usercolor="%{${fg_bold[yellow]}%}"
+				hostcolor="%{${fg_no_bold[blue]}%}"
+			else
+				usercolor="%{${fg_bold[red]}%}"
+				hostcolor="%{${fg_bold[black]}%}"
+			fi
+		else
+			if [ ! -z $SSH_CLIENT ]; then
+				usercolor="%{${fg_bold[blue]}%}"
+				hostcolor="%{${fg_no_bold[blue]}%}"
+			else
+				usercolor="%{${fg_bold[green]}%}"
+				hostcolor="%{${fg_bold[black]}%}"
+			fi
+		fi
+fi
+
+if [[ "$PROMPT_UNICODE" = "yes" ]]; then
+	PVPREFIX="╼╢"
+	PVSUFFIX="╟╾"
+	PR_HBAR='─'
+	PR_VBAR='│'
+	CORNER_LU='╭'
+	CORNER_LD='╰'
+	CORNER_RU='╮'
+	CORNER_RD='╯'
+else
+	PVPREFIX="["
+	PVSUFFIX="]"
+	PR_HBAR='-'
+	PR_VBAR='|'
+fi
+
+# Set up VCS_INFO
+zstyle ':vcs_info:*' enable git hg svn
+zstyle ':vcs_info:(hg*|git*):*' get-revision true
+zstyle ':vcs_info:(hg*|git*):*' check-for-changes true
+
+zstyle ':vcs_info:hg*' formats "(%s)[%i%u %b %m]" # rev+changes branch misc
+zstyle ':vcs_info:hg*' actionformats "(%s|${white}%a${rpscolor})[%i%u %b %m]"
+
+zstyle ':vcs_info:hg*:netbeans' use-simple true
+zstyle ':vcs_info:hg*:*' get-bookmarks true
+zstyle ':vcs_info:hg*:*' get-mq true
+
+zstyle ':vcs_info:hg*:*' get-unapplied true
+zstyle ':vcs_info:hg*:*' patch-format "mq(%g):%n/%c %p"
+zstyle ':vcs_info:hg*:*' nopatch-format "mq(%g):%n/%c %p"
+
+zstyle ':vcs_info:hg*:*' hgrevformat "%r" # only show local rev.
+zstyle ':vcs_info:hg*:*' branchformat "%b" # only show branch
+zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat "%b$vcs_revision:%f%r%f"
+
+if [[ -z $(git ls-files --other --exclude-standard 2> /dev/null) ]] {
+	zstyle ':vcs_info:git*' formats "${GIT_PROMPT_PREFIX}(%s) %12.12i %c%u %b%m${GIT_PROMPT_SUFFIX}" # hash changes branch misc
+	zstyle ':vcs_info:git*' actionformats "(%s|${white}%a${rpscolor}) %12.12i %c%u %b%m"
+} else {
+	zstyle ':vcs_info:git*' formats "${GIT_PROMPT_PREFIX}(%s) %12.12i %c%u${gituntracked} %b%m${GIT_PROMPT_SUFFIX}" # hash changes branch misc
+	zstyle ':vcs_info:git*' actionformats "(%s|${white}%a${rpscolor}) %12.12i %c%u %b%m"
+}
+
+
+
+
+zstyle ':vcs_info:*' stagedstr "$gitstaged●$rpscolor"
+zstyle ':vcs_info:*' unstagedstr "$gitdirty●$rpscolor"
+
+# zstyle ':vcs_info:hg:*:-all-' command fakehg
+# zstyle ':vcs_info:*+*:*' debug true
+
+zstyle ':vcs_info:hg*+set-hgrev-format:*' hooks hg-hashfallback
+zstyle ':vcs_info:hg*+set-message:*' hooks mq-vcs
+zstyle ':vcs_info:git*+set-message:*' hooks git-st git-stash
+
+function prompt_char {
+	git branch >/dev/null 2>/dev/null && echo '±' && return
+	hg root >/dev/null 2>/dev/null && echo '☿' && return
+	svn info >/dev/null 2>/dev/null && echo '☣' && return
+	echo '%#'
+}
+
+exitstatus () {
+  local exitstatus=$?
+
+  if [ $exitstatus -ne 0 ] ; then
+    if [ $exitstatus -gt 128 -a $exitstatus -lt 163 ] ; then
+      echo "${SIG_PROMPT_PREFIX}SIG$signals[$exitstatus-127]${SIG_PROMPT_SUFFIX}"
+    else
+      echo "${SIG_PROMPT_PREFIX}${exitstatus}${SIG_PROMPT_SUFFIX}"
+    fi
+  fi
+}
+
+
+### Dynamically set hgrevformat based on if the local rev is available
+# We don't always know the local revision, e.g. if use-simple is set
+# Truncate long hash to 12-chars but also allow for multiple parents
+function +vi-hg-hashfallback() {
+    if [[ -z ${hook_com[localrev]} ]] ; then
+        local -a parents
+
+        parents=( ${(s:+:)hook_com[hash]} )
+        parents=( ${(@r:12:)parents} )
+        hook_com[rev-replace]="${(j:+:)parents}"
+
+        ret=1
+    fi
+}
+
+# Show remote ref name and number of commits ahead-of or behind
+function +vi-git-st() {
+	local ahead behind remote
+	local -a gitstatus
+
+	# Are we on a remote-tracking branch?
+	remote=${$(git rev-parse --verify ${hook_com[branch]}@{upstream} \
+				--symbolic-full-name --abbrev-ref 2>/dev/null)}
+
+	if [[ -n ${remote} ]] ; then
+		# for git prior to 1.7
+		# ahead=$(git rev-list origin/${hook_com[branch]}..HEAD | wc -l)
+		ahead=$(git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l)
+		(( $ahead )) && gitstatus+=( "${gitstaged}+${ahead}${rpscolor}" )
+
+		# for git prior to 1.7
+		# behind=$(git rev-list HEAD..origin/${hook_com[branch]} | wc -l)
+		behind=$(git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l)
+		(( $behind )) && gitstatus+=( "${gitdirty}-${behind}${rpscolor}" )
+
+		hook_com[branch]="${hook_com[branch]} [ ${remote}${gitstatus:+ }${gitstatus} ]"
+	fi
+}
+
+# Show screen STY and tmux number
+sty () {
+  local sty=$?
+
+  if [ ! -z "$STY" ] || [ ! -z "$TMUX" ] ; then
+    echo "${SIG_PROMPT_PREFIX}${STY:+"SCREEN:"}${(S)STY/#*./}${STY+${TMUX+" - "}}${TMUX:+"TMUX:"}${TMUX/*,/}${SIG_PROMPT_SUFFIX}"
+  fi
+}
+
+screennum() {
+    local att
+    local det
+    local dead
+	if [ -x /usr/bin/screen ]; then
+		att=`screen -ls | grep Attached | wc -l`
+		det=`screen -ls | grep Detached | wc -l`
+		dead=`screen -ls | grep Dead | wc -l`
+		echo "A:$att|D:$det|?:$dead"
+	fi
+}
+
+# Show count of stashed changes
+function +vi-git-stash() {
+    local -a stashes
+
+    if [[ -s ${hook_com[base]}/.git/refs/stash ]] ; then
+        stashes=$(git stash list 2>/dev/null | wc -l)
+        hook_com[misc]+=" (${stashes} stashed)"
+    fi
+}
+
+STYINFO=$(sty)
+# Executed before each prompt
+function precmd {
+	vcs_info
+	setprompt
+	RPS1='$usercolor◀%(?::$exitcolor${PVPREFIX})$(exitstatus)%(?::${PVSUFFIX})${stycolor}${PVPREFIX}$(sty)${rpscolor}${PVSUFFIX}${CORNER_RD}$reset'
+}
+
+
+# Executed after a command has been read and is to be executed.
+function preexec {
+    # if running gnu screen, set the window name to the last run command
+    # FIXME any way to make this not change certain window titles (by window
+    # number or if a title isn't already set?)
+    if [[ "$TERM" =~ "screen" ]]; then
+        local CMD=${1[(wr)^(*=*|ssh|sudo|-*)]}
+        echo -ne "\ek$CMD\e\\"
+    fi
+}
+
+function setprompt() {
+    local -a lines infoline
+    local x i filler i_width
+
+    infoline+=( "${rpscolor}${CORNER_LU}" )
+
+    ### First, assemble the top line
+    # Current dir
+    [[ -w $PWD ]] && infoline+=( ${pathcolor} ) || infoline+=( ${ropathcolor} )
+    infoline+=( "${PVPREFIX} %~ ${PVSUFFIX}${rpscolor}${PR_HBAR}" )
+
+    # Username & host
+    infoline+=( "${PVPREFIX} ${usercolor}%n${reset}@${hostcolor}%m${rpscolor} ${PVSUFFIX}" )
+
+    i_width=${(S)infoline//\%\{*\%\}} # search-and-replace color escapes
+    i_width=${#${(%)i_width}} # expand all escapes and count the chars
+
+    if [[ "$PROMPT_UNICODE" = "yes" ]]; then
+	    filler="${rpscolor}${(l:$(( $COLUMNS - $i_width - 1))::─:)}"
+    else
+	    filler="${rpscolor}${(l:$(( $COLUMNS - $i_width - 1))::-:)}"
+    fi
+    infoline[3]=( "${infoline[3]}${PR_HBAR}${filler}${PR_HBAR}" )
+    infoline+=( "${rpscolor}${CORNER_RU}" )
+
+    ### Now, assemble all prompt lines
+    lines+=( ${(j::)infoline} )
+    scmline="${rpscolor}${PR_VBAR} ${vcs_info_msg_0_}${reset}"
+    i_width=${(S)scmline//\%\{*\%\}} # search-and-replace color escapes
+    i_width=${#${(%)i_width}} # expand all escapes and count the chars
+    filler="${rpscolor}${(l:$(( $COLUMNS - $i_width - 2)):: :)}${reset}"
+
+	[[ -n ${vcs_info_msg_0_} ]] && lines+=( "${scmline}${filler}${rpscolor}${PR_VBAR}" )
+    lines+=( "${CORNER_LD}${PVPREFIX} %(1j.${rpscolor}%j${reset} .)${usercolor}%%${reset} " )
+
+    ### Finally, set the prompt
+    PROMPT=${(F)lines}
+}
+
+venv_rprompt () {
+    if [[ -n $VIRTUAL_ENV ]]; then
+        RPROMPT="${rpscolor} venv:$(basename $VIRTUAL_ENV)${reset}"
+    else
+        RPROMPT=""
+    fi
+}
+
+# function zle-keymap-select {
+    # VIMODE="${${KEYMAP/vicmd/ M:command}/(main|viins)/}"
+    # zle reset-prompt
+# }
+# zle -N zle-keymap-select
+#
+########## Or this one?:
+# function zle-line-init zle-keymap-select {
+    # RPS1="${${KEYMAP/vicmd/-- NORMAL --}/(main|viins)/-- INSERT --}"
+    # RPS2=$RPS1
+    # zle reset-prompt
+# }
+# zle -N zle-line-init
+# zle -N zle-keymap-select

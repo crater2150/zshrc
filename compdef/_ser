@@ -1,0 +1,3 @@
+#compdef ser
+
+_path_files -/ -W /mm/video/series

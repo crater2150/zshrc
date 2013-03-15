@@ -1,0 +1,25 @@
+#compdef gpl gst
+
+_gpl() {
+	if [[ "$VCS_DETECTED" == "hg" ]]; then
+		words=( hg pull "${(@)nw}"); (( CURRENT++ )); _hg
+	elif [[ "$VCS_DETECTED" == "hg" ]]; then
+		words=( svn update "${(@)nw}"); (( CURRENT++ )); _svn
+	else
+		words=( git pull "${(@)nw}"); (( CURRENT++ )); service=git; _git
+	fi
+}
+
+_gst() {
+		words=( git status "${(@)nw}"); (( CURRENT++ )); service=git; _git
+}
+
+nw=("${(@)words[2,$]}")
+case "$service" in
+	gpl)
+		_gpl "$@" && return 0
+		;;
+	gst)
+		_gst "$@" && return 0
+		;;
+esac

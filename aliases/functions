@@ -1,0 +1,244 @@
+#!/bin/zsh
+
+#################################################################################
+# daily use aliases
+##############################################################################{{{
+
+alias ls="ls --color=auto"
+alias ll="ls -hl --group-directories-first"
+alias lll="ls -hla"
+alias ds="du -sh"
+alias :q="exit"
+
+alias rget="rsync -avP --rsh=ssh --append-verify --inplace"
+alias 7zu="7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on"
+
+alias S='sudo $(history -n -1)'
+
+alias rm="rm -I"
+
+gg() {
+    paragrep "$@" -- **/*
+}
+
+fork() {
+	( $* &>/dev/null & )
+}
+
+#}}}
+
+#################################################################################
+# zsh stuff
+##############################################################################{{{
+
+alias histoff="HISTFILE=/dev/null"
+alias histon="HISTFILE=$HOME/.histfile"
+alias E="exec zsh"
+
+# edit and refresh aliases
+aliases() {
+    sudo vim /etc/zsh/aliases/${1:-functions}
+    . /etc/zsh/aliases/*
+}
+
+# per directory configuration
+cd(){
+    if [ -e ".zout" ]; then
+        . ".zout"
+    fi
+    builtin cd $*
+    if [ -e ".zin" ]; then
+        . ".zin"
+    fi
+    todo
+}
+
+
+
+#}}}
+
+#################################################################################
+# administration and init scripts
+##############################################################################{{{
+
+toggle() {
+	if [ -z $2 ]; then
+		/etc/init.d/$1 status |
+			grep started &&
+			sudo /etc/init.d/$1 stop ||
+			sudo /etc/init.d/$1 start
+	else
+		sudo /etc/init.d/$1 $2
+	fi
+}
+
+#}}}
+
+#################################################################################
+# filesystem stuff
+##############################################################################{{{
+alias mkinitramfs='find . -print0 | cpio --null -ov --format=newc | gzip -9'
+
+# bidirectional rsync
+brsync() {
+	rsync -ur --progress $1 $2/..
+	rsync -ur --progress $2 $1/..
+}
+
+# count files in current or given directory
+count() {
+    if [ -z $1 ]; then
+    	ls ./**/*(.) | wc -l
+    else
+    	ls $1/**/*(.) | wc -l
+    fi
+}
+
+pumount() {
+	params=()
+	while [[ "${1[1]}" == "-" ]]; do
+		params+="$1"
+		shift
+	done
+	if [[ "${1[1]}" == "/" ]]; then
+		=pumount "${params[@]}" "$1"
+	else
+		=pumount "${params[@]}" "/media/$1"
+	fi
+}
+
+#}}}
+
+#################################################################################
+# filename manipulation
+##############################################################################{{{
+alias cleanspaces="renamexm -s/\ /_/g -R"
+
+# prefix all given files with first argument to this function
+prefix() {
+	pre=$1;shift
+	for i in $*; do mv $i $pre$i;done
+}
+
+# prefix all given files with consecutive numbers, starting with 1
+# or with number given by -s switch (must be first argument)
+prenumbering() {
+	if [[ "$1" == "-s" ]]; then
+		n=${2};
+		shift 2
+	else
+		n=1
+	fi
+	for i in "$@"; do
+		mv $i ${(l:2::0:)n}_$i;
+		((n++));
+	done 
+}
+
+# appends given suffix (first argument)
+suffix() {
+	suf=$1;shift
+	for i in $*; do mv $i $i$suf;done
+}
+
+#}}}
+
+#################################################################################
+# wrappers
+##############################################################################{{{
+lesswrap() {
+	out=$("$@")
+	((lim=$LINES-1))
+	numlines=$(echo $out | wc -l)
+	if (( $numlines > $lim )); then
+		echo $out | less
+	else
+		echo $out
+	fi
+
+}
+#}}}
+
+#################################################################################
+# audio video photo
+##############################################################################{{{
+
+alias exifcopy="exiftool -tagsFromFile"
+
+#}}}
+
+#################################################################################
+# programming
+##############################################################################{{{
+
+# cd for /code/projects dir with completion
+pp(){
+    if [ -d /code/projects/$* ]; then
+        cd /code/projects/$*
+    else
+        vim /code/projects/$*
+    fi
+}; 
+
+# watch latex file for changes and rebuild
+latexwatch() {
+	maindoc=$1
+	while : ; do
+		inotifywait -e modify $*; pdflatex -halt-on-error $maindoc
+	done  
+}
+
+#}}}
+
+#################################################################################
+# noglobs
+##############################################################################{{{
+alias ri=noglob\ ri
+alias wcalc="noglob wcalc"
+#}}}
+
+#################################################################################
+# tmux
+##############################################################################{{{
+
+tdetachprep() {
+	env -i tmux new-session -d -s detached &>/dev/null
+}
+
+alias :u="tmux select-pane -U"
+alias :d="tmux select-pane -D"
+alias :l="tmux select-pane -L"
+alias :r="tmux select-pane -R"
+alias :split="tmux splitw -v"
+alias :vsplit="tmux splitw -h"
+alias :detachw="tdetachprep; tmux movew -t detached: -s"
+alias :attachw="tdetachprep; tmux movew -t : -s"
+
+#}}}
+
+#################################################################################
+# global and suffix aliases
+##############################################################################{{{
+
+# mplayer dvd drives
+alias -g DSR1="-dvd-device /dev/sr1"
+alias -g DSR0="-dvd-device /dev/sr0"
+alias -g SR1="/dev/sr1"
+alias -g SR0="/dev/sr0"
+
+# mplayer activate softvol
+alias -g SOFTVOL="-softvol -softvol-max 1000"
+
+# lazy shortcuts
+alias -g G="| grep"
+alias -g L="| less"
+alias -g T="| tail"
+
+# xclipboard
+alias -g XS='$(xclip -o -selection primary)'
+alias -g XC='$(xclip -o -selection clipboard)'
+
+alias -s log=vimpager
+#}}}
+
+# vim: foldmethod=marker

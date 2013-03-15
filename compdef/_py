@@ -1,0 +1,3 @@
+#compdef py
+
+_files -W /code/projects/php/

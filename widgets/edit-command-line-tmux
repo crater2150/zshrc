@@ -1,0 +1,18 @@
+ECLHEIGHT=${ECLHEIGHT:-5}
+edit-command-line-tmux() {
+	local tmpfile=${TMPPREFIX:-/tmp/zsh}ecl$$
+
+	print -R - "$PREBUFFER$BUFFER" >$tmpfile
+	exec </dev/tty
+	if [ -n "$TMUX" ] && [ "$UID" -ne 0 ]; then
+		tmux splitw -v -l $ECLHEIGHT "vim -c 'set laststatus=0 showtabline=0 ft=zsh' $tmpfile"
+		pid=$(ps -ef | awk "/[0-9] vim.*${tmpfile:t}/ { print \$2 }")
+		wait_on_pid $pid
+	else
+		${=${VISUAL:-${EDITOR:-vi}}} $tmpfile
+	fi
+	print -Rz - "$(<$tmpfile)" 
+
+	command rm -f $tmpfile
+	zle send-break		# Force reload from the buffer stack
+}
