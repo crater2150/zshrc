@@ -33,16 +33,16 @@ A `depend` file contains the requirements for loading a module. It should
 contain lines of the form `<type> <module>`. There are 3 types for
 dependencies:
 
-	- `depend <module>`: `<module>` will be loaded before the depending
-	  module (the module whose `depend` file contains this rule), regardless
-	of `$ZMODLOAD_ONLY`. If the module is blacklisted, it and the depending
-	module are not loaded. Note that already queued dependencies of the depending
-	module will be loaded anyways.
+- `depend <module>`: `<module>` will be loaded before the depending
+  module (the module whose `depend` file contains this rule), regardless
+  of `$ZMODLOAD_ONLY`. If the module is blacklisted, it and the depending
+  module are not loaded. Note that already queued dependencies of the depending
+  module will be loaded anyways.
 
-	- `after <module>`: `<module>` will be loaded before the depending
-	  module, if it would be loaded anyways. If it is either blacklisted or
-	`$ZMODLOAD_ONLY` is non-empty but does not contain `<module>`, it is not
-	loaded. This does not affect loading of the depending module.
+- `after <module>`: `<module>` will be loaded before the depending
+  module, if it would be loaded anyways. If it is either blacklisted or
+  `$ZMODLOAD_ONLY` is non-empty but does not contain `<module>`, it is not
+  loaded. This does not affect loading of the depending module.
 
-	- `block <module>`: abort loading of the depending module, if `<module>`
-	  is already loaded or contained in `$ZMODLOAD_ONLY`.
+- `block <module>`: abort loading of the depending module, if `<module>`
+  is already loaded or contained in `$ZMODLOAD_ONLY`.
