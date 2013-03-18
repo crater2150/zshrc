@@ -61,8 +61,8 @@ function prompt_preexec {
 	# if running gnu screen, set the window name to the last run command
 	# FIXME any way to make this not change certain window titles (by window
 	# number or if a title isn't already set?)
-	if [[ "$TERM" =~ "screen" ]] \
-	&& [[ "$(tmux show -w au)" != "automatic-rename off" ]]; then
+	if [[ -n "$TMUX" ]] \
+	&& ! tmux show -w | grep -q "automatic-rename off"; then
 		local CMD=${1[(wr)^(*=*|ssh|sudo|-*)]}
 		echo -ne "\ek$CMD\e\\"
 	fi
@@ -73,6 +73,8 @@ if mod_loaded todo; then
 		count=$(todo_count all ${TO_READ_FILE:-$HOME/.to_read})
 		if [ "$count" -gt 1 ]; then
 			echo -n "${PVPREFIX}${pathcolor}To read: $((count -1)) ${rpscolor}${PVSUFFIX}"
+		elif [ "$count" -lt 0 ]; then
+			echo -n "${PVPREFIX}${pathcolor}no todo${rpscolor}${PVSUFFIX}"
 		fi
 	}
 fi

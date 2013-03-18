@@ -7,14 +7,13 @@
 # Lets you load custom functions and zle widgets split into single files.
 #
 # zle widgets are stored in the "widgets" folder in your configuration directory
-# (default: /etc/zsh, if you want to use this in a user configuration file, set
-# the variable $zcpath to your zsh configuration directory)
+# (set with $ZDOTDIR, see manpage. defaults to /etc/zsh)
 #
 # functions are stored in the "functions" folder analogous.
 #
 
-ZWIDGETPATH=${ZWIDGETPATH:-"${zcpath:-/etc/zsh}/widgets"}
-ZFUNCTIONPATH=${ZFUNCTIONPATH:-"${zcpath:-/etc/zsh}/functions"}
+ZWIDGETPATH=${ZWIDGETPATH:-"${ZDOTDIR:-/etc/zsh}/widgets"}
+ZFUNCTIONPATH=${ZFUNCTIONPATH:-"${ZDOTDIR:-/etc/zsh}/functions"}
 fpath+=( "${ZWIDGETPATH}" )
 fpath+=( "${ZFUNCTIONPATH}" )
 

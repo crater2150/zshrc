@@ -1,2 +1,3 @@
 aliases/local
 *.zwc
+.zcompdump

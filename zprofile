@@ -1,14 +1,12 @@
-# /etc/zsh/zprofile
-# $Header: /var/cvsroot/gentoo-x86/app-shells/zsh/files/zprofile-1,v 1.1 2010/08/15 12:21:56 tove Exp $
-
-# Load environment settings from profile.env, which is created by
-# env-update from the files in /etc/env.d
+# gentoo specific
 if [ -e /etc/profile.env ] ; then
 	. /etc/profile.env
 fi
 
-# You should override these in your ~/.zprofile (or equivalent) for per-user
-# settings.  For system defaults, you can add a new file in /etc/profile.d/.
+if [ -e "$HOME/.profile" ]; then
+	. "$HOME/.profile"
+fi
+
 export EDITOR=${EDITOR:-/usr/bin/vim}
 export PAGER=${PAGER:-/usr/bin/less}
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -16,28 +14,21 @@ export XDG_CONFIG_HOME="$HOME/.config"
 # 077 would be more secure, but 022 is generally quite realistic
 umask 022
 
-# Set up PATH depending on whether we're root or a normal user.
-# There's no real reason to exclude sbin paths from the normal user,
-# but it can make tab-completion easier when they aren't in the
-# user's PATH to pollute the executable namespace.
-#
-# It is intentional in the following line to use || instead of -o.
-# This way the evaluation can be short-circuited and calling whoami is
-# avoided.
-#if [ "$EUID" = "0" ] || [ "$USER" = "root" ] ; then
-	PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${ROOTPATH}:$PATH"
-#else
-#	PATH="$HOME/.bin:/usr/local/bin:/usr/bin:/bin:${PATH}"
-#fi
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${ROOTPATH}:$PATH"
+
 PATH="/usr/lib/colorgcc/bin/:${PATH}"
+
 export PATH
 unset ROOTPATH
 
 shopts=$-
 setopt nullglob
+
+#more gentoo specific stuff
 for sh in /etc/profile.d/*.sh ; do
 	[ -r "$sh" ] && . "$sh"
 done
+
 unsetopt nullglob
 set -$shopts
 unset sh shopts

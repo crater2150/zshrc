@@ -1,10 +1,15 @@
 #!/bin/zsh
-
-todo_count() {
-	if [ -n "$2" ]; then
-		file="--database $2"
-	else
-		file="-G"
-	fi
-	todo ${=file} -f +${1:-high} | wc -l
-}
+if command -v todo >/dev/null; then
+	todo_count() {
+		if [ -n "$2" ]; then
+			file="--database $2"
+		else
+			file="-G"
+		fi
+		todo ${=file} -f +${1:-high} | wc -l
+	}
+else
+	todo_count() {
+		echo -1
+	}
+fi

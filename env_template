@@ -1,0 +1,21 @@
+export ZDOTDIR="$HOME/.zsh"
+PROMPT_UNICODE=yes
+LANG=en_US.UTF-8
+export LANG
+zcpath="$ZDOTDIR"
+
+# on foreign server I don't want to accidentaly alarm admins
+sudo() {
+	echo "no root here";
+}
+
+su() {
+	echo "no root here";
+}
+
+# set modules to load. here: exclude highlight, because it is no fun over slow
+# connections
+ZMODLOAD_ONLY=( autoloader bindings completion vcs prompt )
+
+source $zcpath/zprofile
+source $zcpath/zshrc

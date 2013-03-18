@@ -7,7 +7,7 @@
 #
 # Modules are stored in the "modules" folder in your configuration directory
 # (default: /etc/zsh, if you want to use this in a user configuration file, set
-# the variable $zcpath to your zsh configuration directory)
+# the variable $ZDOTDIR to your zsh configuration directory in ~/.zshenv)
 #
 # Each module should have a file called "init". This file is sourced, when the
 # module is loaded and is responsible for sourcing any other files needed by the
@@ -21,7 +21,7 @@
 #################################
 
 # Path to module directory
-ZMODPATH=${ZMODPATH:-"${zcpath:-/etc/zsh}/modules"}
+ZMODPATH=${ZMODPATH:-"${ZDOTDIR:-/etc/zsh}/modules"}
 . $ZMODPATH/helpers.zsh
 errdetails=""
 
@@ -100,7 +100,8 @@ mod_check_dep() {
 			if ! mod_queue "$dep" is_dep ${modpath}; then
 				errdetails="$dep"
 				return 1;
-			fi;;
+			fi
+			;;
 		"after")
 			if [ -z "$ZMODLOAD_ONLY" ] \
 				|| in_array "$dep" "${(@)ZMODLOAD_ONLY}"; then

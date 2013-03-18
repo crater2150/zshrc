@@ -12,8 +12,8 @@ setopt short_loops
 setopt cdable_vars
 
 # autoload completions
-fpath+=( "${zcpath:-/etc/zsh}/compdef" )
-autoload -U ${zcpath:-/etc/zsh}/compdef/*(:t)
+fpath+=( "${ZDOTDIR:-/etc/zsh}/compdef" )
+autoload -U ${ZDOTDIR:-/etc/zsh}/compdef/*(:t)
 
 bindkey -v
 
@@ -22,13 +22,13 @@ autoload -Uz zmv
 
 zmodload zsh/zftp
 
-for i in  ${zcpath:-/etc/zsh}/aliases/*~${zcpath:-/etc/zsh}/aliases/*.zwc; do
+for i in  ${ZDOTDIR:-/etc/zsh}/aliases/*~${ZDOTDIR:-/etc/zsh}/aliases/*.zwc; do
     . $i
 done
 
 stty -ixon
 
-. ${zcpath:-/etc/zsh}/modules/loader.zsh && mod_init
+. ${ZDOTDIR:-/etc/zsh}/modules/loader.zsh && mod_init
 
 echo $PATH | grep -q 'local' || . /etc/zsh/zprofile
 echo $PATH | grep -q 'sbin' || . /etc/zsh/zprofile
