@@ -105,7 +105,7 @@ mod_check_dep() {
 			;;
 		"after")
 			if ([ -z "$ZMODLOAD_ONLY" ] \
-				|| in_array "$dep" "${(@)ZMODLOAD_ONLY}")
+				|| in_array "$dep" "${(@)ZMODLOAD_ONLY}") \
 				&& ! in_array "$dep" "${(@)ZMODLOAD_BLACKLIST}"; then
 				mod_queue "$dep" is_dep ${modpath};
 			fi ;;
