@@ -1,7 +1,5 @@
 export ZDOTDIR="$HOME/.zsh"
 PROMPT_UNICODE=yes
-LANG=en_US.UTF-8
-export LANG
 zcpath="$ZDOTDIR"
 
 # on foreign server I don't want to accidentaly alarm admins

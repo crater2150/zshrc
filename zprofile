@@ -3,6 +3,10 @@ if [ -e /etc/profile.env ] ; then
 	. /etc/profile.env
 fi
 
+for sh in /etc/profile.d/*.sh ; do
+	[ -r "$sh" ] && . "$sh"
+done
+
 if [ -e "$HOME/.profile" ]; then
 	. "$HOME/.profile"
 fi
@@ -24,10 +28,6 @@ unset ROOTPATH
 shopts=$-
 setopt nullglob
 
-#more gentoo specific stuff
-for sh in /etc/profile.d/*.sh ; do
-	[ -r "$sh" ] && . "$sh"
-done
 
 unsetopt nullglob
 set -$shopts

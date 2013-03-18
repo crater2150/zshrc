@@ -76,6 +76,7 @@ mod_deps() {
 
 	while read relation dep; do
 		mod_check_dep $modpath $relation $dep
+		[ $? -gt 0 ] && return $?;
 	done < "$modpath/depend"
 	return 0;
 }
@@ -103,8 +104,9 @@ mod_check_dep() {
 			fi
 			;;
 		"after")
-			if [ -z "$ZMODLOAD_ONLY" ] \
-				|| in_array "$dep" "${(@)ZMODLOAD_ONLY}"; then
+			if ([ -z "$ZMODLOAD_ONLY" ] \
+				|| in_array "$dep" "${(@)ZMODLOAD_ONLY}")
+				&& ! in_array "$dep" "${(@)ZMODLOAD_BLACKLIST}"; then
 				mod_queue "$dep" is_dep ${modpath};
 			fi ;;
 		"block")
