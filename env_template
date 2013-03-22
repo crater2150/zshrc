@@ -14,6 +14,3 @@ su() {
 # set modules to load. here: exclude highlight, because it is no fun over slow
 # connections
 ZMODLOAD_ONLY=( autoloader bindings completion vcs prompt )
-
-source $zcpath/zprofile
-source $zcpath/zshrc
