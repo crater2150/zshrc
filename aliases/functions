@@ -50,10 +50,7 @@ cd(){
     if [ -e ".zin" ]; then
         . ".zin"
     fi
-    todo
 }
-
-
 
 #}}}
 

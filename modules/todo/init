@@ -8,6 +8,7 @@ if command -v todo >/dev/null; then
 		fi
 		todo ${=file} -f +${1:-high} | wc -l
 	}
+	chpwd_hook todo
 else
 	todo_count() {
 		echo -1
