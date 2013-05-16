@@ -44,11 +44,11 @@ aliases() {
 # per directory configuration
 cd(){
     if [ -e ".zout" ]; then
-        . ".zout"
+        . "./.zout"
     fi
     builtin cd $*
     if [ -e ".zin" ]; then
-        . ".zin"
+        . "./.zin"
     fi
 }
 
