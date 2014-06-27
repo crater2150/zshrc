@@ -1,5 +1,5 @@
 #!/bin/zsh
-if [ -e $HOME/.wtf ] && which wtf &>/dev/null; then
+if [ -e $HOME/.wtf ] && exists wtf; then
 	if [ -n "$WTF_WORK_END" ]; then 
 		export WTF_REST=$(wtf raw -d $WTF_WORK_END diff);
 	else

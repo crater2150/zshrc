@@ -2,6 +2,9 @@
 HISTFILE=~/.histfile
 HISTSIZE=100000
 SAVEHIST=100000
+GPG_TTY=`tty`
+export GPG_TTY
+
 setopt autocd extendedglob notify correct autonamedirs
 setopt list_ambiguous autopushd  pushd_ignore_dups
 setopt hist_ignore_all_dups hist_ignore_space share_history 

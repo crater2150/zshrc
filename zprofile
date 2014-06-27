@@ -14,6 +14,8 @@ fi
 export EDITOR=${EDITOR:-/usr/bin/vim}
 export PAGER=${PAGER:-/usr/bin/less}
 export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local"
 
 # 077 would be more secure, but 022 is generally quite realistic
 umask 022

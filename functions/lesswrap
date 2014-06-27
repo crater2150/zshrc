@@ -1,0 +1,19 @@
+#!/bin/zsh
+
+lesswrap() {
+	cmd="$1"
+	alias $cmd="autoless command ${*}"
+}
+
+autoless() {
+	out=$("$@")
+	((lim=$LINES-1))
+	numlines=$(echo $out | wc -l)
+	if (( $numlines > $lim )); then
+		echo $out | less
+	else
+		echo $out
+	fi
+
+}
+lesswrap eix -F
