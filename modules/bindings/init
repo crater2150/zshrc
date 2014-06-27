@@ -7,7 +7,8 @@ bindkey -M vicmd ! edit-command-line-tmux
 
 #unicode input
 autoload -U insert-unicode-char
-bindkey "u"  insert-unicode-char
+bindkey $'\26u'  insert-unicode-char
+bindkey "\e."  insert-last-word
 
 bindkey "^[[2~" yank                    # Insert
 bindkey "^[[3~" delete-char             # Del
@@ -17,26 +18,26 @@ bindkey "^[e"   expand-cmd-path         # C-e for expanding path of typed comman
 bindkey "^[[A"  up-line-or-search       # Up arrow for back-history-search.
 bindkey "^[[B"  down-line-or-search     # Down arrow for fwd-history-search.
 bindkey " "     magic-space             # Do history expansion on space.
-bindkey ""    backward-delete-char   #backspace
-bindkey ""    backward-delete-word   #C-backspace
+bindkey $'\177'    backward-delete-char   #backspace
+bindkey $'\10'    backward-delete-word   #C-backspace
 case "$TERM" in
 	*xterm*|(dt|k)term)
-		bindkey "[H"  beginning-of-line       # Pos1
-		bindkey "[F"  end-of-line             # End
+		bindkey "\e[H"  beginning-of-line       # Pos1
+		bindkey "\e[F"  end-of-line             # End
 	;;
 	rxvt*|Eterm)
-		bindkey "^[[7~" beginning-of-line       # Pos1
-		bindkey "^[[8~" end-of-line             # End
+		bindkey "\e[7~" beginning-of-line       # Pos1
+		bindkey "\e[8~" end-of-line             # End
 	;;
 	linux|screen*)
-		bindkey "[1~" beginning-of-line       # Pos1
-		bindkey "[4~" end-of-line             # End
+		bindkey "\e[1~" beginning-of-line       # Pos1
+		bindkey "\e[4~" end-of-line             # End
 	;;
 esac
-bindkey "OA" up-line-or-history
-bindkey "OB" down-line-or-history
-bindkey "[1;5D" vi-backward-blank-word
-bindkey "[1;5C" vi-forward-blank-word
+bindkey "\eOA" up-line-or-history
+bindkey "\eOB" down-line-or-history
+bindkey "\e[1;5D" vi-backward-blank-word
+bindkey "\e[1;5C" vi-forward-blank-word
 #bindkey . rationalise-dot
 
-bindkey "" push-line-or-edit
+bindkey $'\20' push-line-or-edit
