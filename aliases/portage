@@ -2,7 +2,7 @@
 
 alias eud="emerge -vabuDN -j4 --keep-going world"
 alias fetchlog="tail -f /var/log/emerge-fetch.log"
-alias emerge="sudo emerge"
+alias emerge="noglob sudo emerge"
 
 nolto() {
 	pkgenvconf $1 nolto nolto
@@ -50,7 +50,3 @@ pkgenvconf() {
 	*) ;;
 	esac
 }
-
-
-alias eix="lesswrap /usr/bin/eix -F"
-

@@ -10,16 +10,14 @@ alias lll="ls -hla"
 alias ds="du -sh"
 alias :q="exit"
 
-alias rget="rsync -avP --rsh=ssh --append-verify --inplace"
+alias rget="rsync -rvP --rsh=ssh --append-verify --inplace"
 alias 7zu="7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on"
 
+alias sudo="sudo "
 alias S='sudo $(history -n -1)'
 
 alias rm="rm -I"
-
-gg() {
-    paragrep "$@" -- **/*
-}
+alias v="xdg-open"
 
 fork() {
 	( $* &>/dev/null & )
@@ -55,40 +53,12 @@ cd(){
 #}}}
 
 #################################################################################
-# administration and init scripts
-##############################################################################{{{
-
-toggle() {
-	if [ -z $2 ]; then
-		/etc/init.d/$1 status |
-			grep started &&
-			sudo /etc/init.d/$1 stop ||
-			sudo /etc/init.d/$1 start
-	else
-		sudo /etc/init.d/$1 $2
-	fi
-}
-
-#}}}
-
-#################################################################################
 # filesystem stuff
 ##############################################################################{{{
-alias mkinitramfs='find . -print0 | cpio --null -ov --format=newc | gzip -9'
-
-# bidirectional rsync
-brsync() {
-	rsync -ur --progress $1 $2/..
-	rsync -ur --progress $2 $1/..
-}
 
 # count files in current or given directory
 count() {
-    if [ -z $1 ]; then
-    	ls ./**/*(.) | wc -l
-    else
-    	ls $1/**/*(.) | wc -l
-    fi
+	find $1 \( ! -path '*/.*' \) | wc -l
 }
 
 pumount() {
@@ -98,9 +68,9 @@ pumount() {
 		shift
 	done
 	if [[ "${1[1]}" == "/" ]]; then
-		=pumount "${params[@]}" "$1"
+		command pumount "${params[@]}" "$1"
 	else
-		=pumount "${params[@]}" "/media/$1"
+		command pumount "${params[@]}" "/media/$1"
 	fi
 }
 
@@ -138,22 +108,6 @@ suffix() {
 	for i in $*; do mv $i $i$suf;done
 }
 
-#}}}
-
-#################################################################################
-# wrappers
-##############################################################################{{{
-lesswrap() {
-	out=$("$@")
-	((lim=$LINES-1))
-	numlines=$(echo $out | wc -l)
-	if (( $numlines > $lim )); then
-		echo $out | less
-	else
-		echo $out
-	fi
-
-}
 #}}}
 
 #################################################################################
@@ -217,15 +171,6 @@ alias :attachw="tdetachprep; tmux movew -t : -s"
 # global and suffix aliases
 ##############################################################################{{{
 
-# mplayer dvd drives
-alias -g DSR1="-dvd-device /dev/sr1"
-alias -g DSR0="-dvd-device /dev/sr0"
-alias -g SR1="/dev/sr1"
-alias -g SR0="/dev/sr0"
-
-# mplayer activate softvol
-alias -g SOFTVOL="-softvol -softvol-max 1000"
-
 # lazy shortcuts
 alias -g G="| grep"
 alias -g L="| less"
@@ -237,5 +182,34 @@ alias -g XC='$(xclip -o -selection clipboard)'
 
 alias -s log=vimpager
 #}}}
+
+#################################################################################
+# various small scripts
+##############################################################################{{{
+
+urlencode() {
+	local input
+        setopt extendedglob
+	if [ -n "$1" ]; then
+		input="$*"
+	else
+		input=$(</dev/stdin)
+	fi
+	# by jkramer, source: http://stackoverflow.com/a/187853/928769
+        echo "${${(j: :)input}//(#b)(?)/%$[[##16]##${match[1]}]}"
+}
+
+#}}}
+
+fasel-tunnel() {
+	if [[ -z "$1" || -z "$2" || "$1" == "-h" || "$1" == "--help" ]]; then
+		echo "Usage: fasel-tunnel <host> <port> [remote_port]"
+		return
+	fi
+	local host="$1";
+	local port="$2";
+	local remote_port="${3:-$2}"
+	ssh -L $port:$host:$remote_port fasel -N &
+}
 
 # vim: foldmethod=marker

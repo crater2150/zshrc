@@ -22,6 +22,8 @@ autoload -Uz zmv
 
 zmodload zsh/zftp
 
+function exists { command -v "$@" >/dev/null }
+
 for i in  ${ZDOTDIR:-/etc/zsh}/aliases/*~${ZDOTDIR:-/etc/zsh}/aliases/*.zwc; do
     . $i
 done
@@ -38,3 +40,5 @@ zstyle ':completion:*' verbose yes
 zstyle ':completion:*:descriptions' format ‘%B%d%b’
 zstyle ':completion:*:messages' format ‘%d’
 zstyle ':completion:*:warnings' format ‘No matches for: %d’
+
+exists todo && todo
