@@ -47,7 +47,7 @@ zstyle ':vcs_info:git*+set-message:*' hooks git-st git-stash
 zstyle ':vcs_info:*+pre-get-data:*' hooks vcs-detect
 
 disable_pattern=()
-for i in $MPATH/filter/*; do
+for i in $MPATH/filter/*(N); do
 	filter="$(readlink -f $i)(|/*)"
 	disable_pattern=("${disable_pattern[@]}" "$filter");
 done
