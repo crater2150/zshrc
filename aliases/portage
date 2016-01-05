@@ -1,8 +1,30 @@
 #!/bin/zsh
 
-alias eud="emerge -vabuDN -j4 --keep-going world"
+alias eud="emerge -vabuDUN -j4 --keep-going world"
 alias fetchlog="tail -f /var/log/emerge-fetch.log"
 alias emerge="noglob sudo emerge"
+
+fetchrestricted() {
+	for file in "$@"; do
+		mv "$file" /var/portage/distfiles/
+		chown portage:portage /var/portage/distfiles/${file:t}
+		chmod 664 /var/portage/distfiles/${file:t}
+	done
+}
+
+gpo-get() {
+	if [[ -z "$2" ]]; then
+		echo "Usage: gpo-get <category> <url>"
+		return
+	fi
+	cd /var/portage/overlay
+	name=$(curl -sI "$2" | awk -F\" '/^Content-Disposition/ { print $2 }')
+	basename="${name//-[0-9]*}"
+	mkdir -p "$1/${basename}"
+	curl "$2" > "$1/${basename}/$name"
+	cd "$1/${basename}"
+	ebuild $name digest
+}
 
 nolto() {
 	pkgenvconf $1 nolto nolto

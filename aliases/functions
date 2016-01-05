@@ -10,7 +10,7 @@ alias lll="ls -hla"
 alias ds="du -sh"
 alias :q="exit"
 
-alias rget="rsync -rvP --rsh=ssh --append-verify --inplace"
+alias rget="rsync -rvP --append-verify --inplace"
 alias 7zu="7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on"
 
 alias sudo="sudo "
@@ -115,7 +115,19 @@ suffix() {
 ##############################################################################{{{
 
 alias exifcopy="exiftool -tagsFromFile"
+photobydate() {
+	for i in (#i)*.(JPG|CR2); do
+		dir=$(exiftool -p '$DateTimeOriginal' $i | tr ':' '-' | cut -d' ' -f1;)
+		mkdir -p $dir
+		mv ${i:r}.* $dir
+	done
+}
 
+alias mkvidentify="mkvmerge --identify"
+
+cropdetect() {
+	ffmpeg -ss ${2:-00:05:00} -t 1 -i "${1}" -vf cropdetect -f null - 2>&1 | awk '/crop/ { print $NF }' | tail -1
+}
 #}}}
 
 #################################################################################
@@ -124,10 +136,10 @@ alias exifcopy="exiftool -tagsFromFile"
 
 # cd for /code/projects dir with completion
 pp(){
-    if [ -d /code/projects/$* ]; then
-        cd /code/projects/$*
+    if [ -d $HOME/code/projects/$* ]; then
+        cd $HOME/code/projects/$*
     else
-        vim /code/projects/$*
+        vim $HOME/code/projects/$*
     fi
 }; 
 
@@ -137,6 +149,15 @@ latexwatch() {
 	while : ; do
 		inotifywait -e modify $*; pdflatex -halt-on-error $maindoc
 	done  
+}
+
+svn() {
+	case $1 in
+		log|diff)
+			command svn "$@" | $PAGER ;;
+		*)
+			command svn "$@" ;;
+	esac
 }
 
 #}}}
@@ -167,6 +188,17 @@ alias :attachw="tdetachprep; tmux movew -t : -s"
 
 #}}}
 
+#################################################################################
+# btrfs
+##############################################################################{{{
+
+btrfs-subvolume-force-delete() {
+	btrfs property set "$1" ro false
+	btrfs subvolume delete "$1"
+}
+
+#}}}
+#
 #################################################################################
 # global and suffix aliases
 ##############################################################################{{{
