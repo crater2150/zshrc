@@ -1,4 +1,5 @@
 aliases/local
 aliases/private_functions
+modules/vcs/filter
 *.zwc
 .zcompdump
