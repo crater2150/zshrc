@@ -25,15 +25,16 @@ zmodload zsh/zftp
 
 function exists { command -v "$@" >/dev/null }
 
-for i in  ${ZDOTDIR:-/etc/zsh}/aliases/*~${ZDOTDIR:-/etc/zsh}/aliases/*.zwc; do
-    . $i
-done
 
 #ZMODLOAD_BLACKLIST=( prompt )
 
 stty -ixon
 
 . ${ZDOTDIR:-/etc/zsh}/modules/loader.zsh && mod_init
+
+for i in  ${ZDOTDIR:-/etc/zsh}/aliases/*~${ZDOTDIR:-/etc/zsh}/aliases/*.zwc; do
+    . $i
+done
 
 echo $PATH | grep -q 'local' || . /etc/zsh/zprofile
 echo $PATH | grep -q 'sbin' || . /etc/zsh/zprofile
