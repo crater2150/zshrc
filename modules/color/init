@@ -37,8 +37,8 @@ if [[ "`tput colors`" == "256" ]] || [[ "`tput colors`" == "88" ]] ; then
 	fi
 	usercolor="%{${FX[bold]}${FG[$usercolor_base]}%}"
 	# 8-color-term
-	if [ -e /etc/DIR_COLORS_256 ] ; then
-		eval "$(dircolors /etc/DIR_COLORS_256)"
+	if [ -e /etc/DIR_COLORS.256 ] ; then
+		eval "$(dircolors /etc/DIR_COLORS.256)"
 	elif [ -e /etc/DIR_COLORS ]; then
 		eval "$(dircolors /etc/DIR_COLORS)"
 	fi
@@ -47,10 +47,10 @@ else
 
 	gitdirty="%{${fg[yellow]}%}"
 	gitstaged="%{${fg[green]}%}"
-	gitclean="%{$rightcolor%}"
-	vcs_revision="%{${fg[250]}%}"
+	gitclean="%{${fg[white]}%}"
+	vcs_revision="%{${fg_bold[black]}%}"
 
-	exitcolor="%{$gitdirty%}"
+	exitcolor="$gitdirty"
 	rpscolor="%{$fg_bold[black]}%}"
 
 	if [ "$EUID" = "0" ] || [ "$USER" = "root" ] ; then
