@@ -6,21 +6,26 @@ autoload -U promptinit
 PROMPT_UNICODE=${PROMPT_UNICODE:-yes}
 setopt prompt_subst
 
+PVPREFIX="╼╢"
+PVSUFFIX="╟╾"
+PR_HBAR='─'
+PR_VBAR='│'
+CORNER_LU='╭'
+CORNER_LD='╰'
+CORNER_RU='╮'
+CORNER_RD='╯'
+ARR_LEFT='◀'
 
-if [[ "$PROMPT_UNICODE" = "yes" ]]; then
-	PVPREFIX="╼╢"
-	PVSUFFIX="╟╾"
-	PR_HBAR='─'
-	PR_VBAR='│'
-	CORNER_LU='╭'
-	CORNER_LD='╰'
-	CORNER_RU='╮'
-	CORNER_RD='╯'
-else
+if [[ "$PROMPT_UNICODE" != "yes" ]]; then
 	PVPREFIX="["
 	PVSUFFIX="]"
 	PR_HBAR='-'
 	PR_VBAR='|'
+	CORNER_LU=','
+	CORNER_LD="'"
+	CORNER_RU=','
+	CORNER_RD="'"
+	ARR_LEFT='<'
 fi
 
 
@@ -51,7 +56,7 @@ function prompt_precmd {
 		vcs_info
 	fi
 	setprompt
-	RPS1='$usercolor◀%(?::$exitcolor${PVPREFIX})$(exitstatus)%(?::${PVSUFFIX})${stycolor}${PVPREFIX}$(sty)${rpscolor}${PVSUFFIX}${CORNER_RD}$reset'
+	RPS1='$usercolor${ARR_LEFT}%(?::$exitcolor${PVPREFIX})$(exitstatus)%(?::${PVSUFFIX})${stycolor}${PVPREFIX}$(sty)${rpscolor}${PVSUFFIX}${CORNER_RD}$reset'
 }
 
 precmd_hook prompt_precmd
@@ -95,7 +100,6 @@ function setprompt() {
 	# Username & host
 	infoline+=( "%(1j.${PVPREFIX} ${gitdirty}Jobs: %j${rpscolor} ${PVSUFFIX}.)" )
 	mod_loaded todo && infoline+=( "$(todo_to_read_info)" )
-	[ -n "${WTF_REST}" ] && infoline+=( "${WTF_REST_FORMATTED}" )
 	infoline+=( "${PVPREFIX} ${usercolor}%n${reset}@${hostcolor}%m${rpscolor} ${PVSUFFIX}" )
 
 	i_width=${(S)infoline//\%\{*\%\}} # search-and-replace color escapes
