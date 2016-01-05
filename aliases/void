@@ -1,0 +1,12 @@
+#!/bin/zsh
+
+alias xq="xbps-query -Rs"
+
+sv() {
+	command sv "$@"
+	if [[ "$1" == "up" ]]; then
+		shift
+		sleep 0.5
+		command sv check "$@"
+	fi
+}
