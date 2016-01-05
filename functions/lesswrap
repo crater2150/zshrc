@@ -16,4 +16,3 @@ autoless() {
 	fi
 
 }
-lesswrap eix -F

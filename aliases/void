@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+grep -q "void" /etc/os-release || return
+
 alias xq="xbps-query -Rs"
 
 sv() {

@@ -1,5 +1,8 @@
 #!/bin/zsh
 
+grep -q "gentoo" /etc/os-release || return
+
+lesswrap eix -F
 alias eud="emerge -vabuDUN -j4 --keep-going world"
 alias fetchlog="tail -f /var/log/emerge-fetch.log"
 alias emerge="noglob sudo emerge"
