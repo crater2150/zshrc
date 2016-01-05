@@ -1,9 +1,0 @@
-#!/bin/zsh
-if [ -e $HOME/.wtf ] && exists wtf; then
-	if [ -n "$WTF_WORK_END" ]; then 
-		export WTF_REST=$(wtf raw -d $WTF_WORK_END diff);
-	else
-		export WTF_REST=$(wtf raw diff);
-	fi
-	export WTF_REST_FORMATTED="$(printf "%.2f days\n" $((WTF_REST/28800.0)))"
-fi
