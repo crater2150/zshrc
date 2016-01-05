@@ -36,12 +36,16 @@ if [[ "`tput colors`" == "256" ]] || [[ "`tput colors`" == "88" ]] ; then
 		hostcolor=$gitclean
 	fi
 	usercolor="%{${FX[bold]}${FG[$usercolor_base]}%}"
-	# 8-color-term
-	if [ -e /etc/DIR_COLORS.256 ] ; then
-		eval "$(dircolors /etc/DIR_COLORS.256)"
-	elif [ -e /etc/DIR_COLORS ]; then
-		eval "$(dircolors /etc/DIR_COLORS)"
-	fi
+
+	for colorfile in /etc/DIR_COLORS.256 \
+	                 /etc/DIR_COLORS.256color \
+	                 /etc/colors/DIR_COLORS.256 \
+					 /etc/colors/DIR_COLORS.256color; do
+		if [ -e $colorfile ] ; then
+			eval "$(dircolors $colorfile)"
+			break;
+		fi
+	done
 else
 	pathcolor="%{$fg_bold[blue]}%}"
 
@@ -70,6 +74,6 @@ else
 			hostcolor="%{${fg_bold[black]}%}"
 		fi
 	fi
-
-	[ -e /etc/DIR_COLORS ] && eval "$(dircolors /etc/DIR_COLORS)"
 fi
+
+[[ -z "$LS_COLORS" ]] && [ -e /etc/DIR_COLORS ] && eval "$(dircolors /etc/DIR_COLORS)"
