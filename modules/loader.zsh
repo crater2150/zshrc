@@ -43,10 +43,12 @@ mod_queue() {
 	local module="$1"
 	local modsource="$ZMODPATH/$module"
 
-	if [[ "$2" == "is_dep" ]]; then
-		if ! [ -e "$modsource" ] ; then
+	if ! mod_exists "$module" ; then
+		if [[ "$2" == "is_dep" ]]; then
 			echo "$3: Unsatisfied dependency \"$module\"";
 			return 1
+		else
+			return 2
 		fi
 	fi
 
@@ -60,6 +62,10 @@ mod_queue() {
 			2) echo "module $module not loaded because of blocking module: $errdetails";;
 		esac
 	fi
+}
+
+mod_exists() {
+	[ -e "$ZMODPATH/$module" ]
 }
 
 # Checks for module dependencies
@@ -106,8 +112,8 @@ mod_check_dep() {
 		"after")
 			if ([ -z "$ZMODLOAD_ONLY" ] \
 				|| in_array "$dep" "${(@)ZMODLOAD_ONLY}") \
-				&& ! in_array "$dep" "${(@)ZMODLOAD_BLACKLIST}"; then
-				mod_queue "$dep" is_dep ${modpath};
+			&& ! in_array "$dep" "${(@)ZMODLOAD_BLACKLIST}"; then
+					mod_queue "$dep"
 			fi ;;
 		"block")
 			if in_array "$dep" "${(@)ZMODLOAD_ONLY}" \
