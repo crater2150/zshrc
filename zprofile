@@ -28,8 +28,6 @@ umask 022
 
 PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${ROOTPATH}:$PATH"
 
-PATH="/usr/lib/colorgcc/bin/:${PATH}"
-
 export PATH
 unset ROOTPATH
 
