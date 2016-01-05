@@ -1,4 +1,5 @@
 autoload -U zfinit && zfinit
+zmodload zsh/zftp
 
 imagepush() {
     zfopen "crater2150.de" "ftp33701-crimages" \

@@ -21,7 +21,6 @@ bindkey -v
 autoload -Uz compinit && compinit
 autoload -Uz zmv
 
-zmodload zsh/zftp
 
 function exists { command -v "$@" >/dev/null }
 
