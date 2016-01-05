@@ -2,8 +2,6 @@
 HISTFILE=~/.histfile
 HISTSIZE=100000
 SAVEHIST=100000
-GPG_TTY=`tty`
-export GPG_TTY
 
 setopt autocd extendedglob notify correct autonamedirs
 setopt list_ambiguous autopushd  pushd_ignore_dups
@@ -31,6 +29,8 @@ for i in  ${ZDOTDIR:-/etc/zsh}/aliases/*~${ZDOTDIR:-/etc/zsh}/aliases/*.zwc; do
     . $i
 done
 
+#ZMODLOAD_BLACKLIST=( prompt )
+
 stty -ixon
 
 . ${ZDOTDIR:-/etc/zsh}/modules/loader.zsh && mod_init
@@ -43,5 +43,6 @@ zstyle ':completion:*' verbose yes
 zstyle ':completion:*:descriptions' format ‘%B%d%b’
 zstyle ':completion:*:messages' format ‘%d’
 zstyle ':completion:*:warnings' format ‘No matches for: %d’
+
 
 exists todo && todo
