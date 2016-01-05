@@ -1,0 +1,8 @@
+#compdef mediathek
+
+function _mediathek {
+	typeset -a targets
+	targets=("${(@f)$(mediathek -l)}")
+	_describe target targets
+}
+
