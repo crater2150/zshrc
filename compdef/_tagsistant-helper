@@ -1,0 +1,33 @@
+#compdef tagsistant-helper tag tcd
+
+tagdir=${TAGSISTENT_ROOT:-$HOME/tagged}/store
+
+_file_or_tag() {
+	_alternative \
+		"files:file:_files" \
+		"tags:tag:_files -W $tagdir"
+}
+
+_tag() {
+	typeset -A opt_args
+	local context state line
+
+	_arguments \
+		"*:argument:_file_or_tag" \
+		"-n[set target name]:target name:" \
+		"--name[set target name]:target name:" \
+		"-p[preview]"
+}
+
+_tcd() {
+	_files -W $tagdir
+}
+
+_tagsistant-helper() {
+	case $service in
+		tag) _tag;;
+		tcd) _tcd;;
+		papertag) _papertag;;
+		*) _message "Err";;
+	esac
+}

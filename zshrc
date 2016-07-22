@@ -45,4 +45,18 @@ zstyle ':completion:*:messages' format ‘%d’
 zstyle ':completion:*:warnings' format ‘No matches for: %d’
 
 
+typeset -A conf_locations
+conf_locations=(
+	vim         $XDG_CONFIG_HOME/vim
+	awesome     $XDG_CONFIG_HOME/awesome
+	mutt        $HOME/.mutt/muttrc
+	xd          $XDG_CONFIG_HOME/xd.conf
+	zsh         /etc/zsh
+	offlineimap $XDG_CONFIG_HOME/offlineimap/config
+	compose     $HOME/.XCompose.long
+	vdirsyncer  $HOME/.vdirsyncer/config
+	xd			$XDG_CONFIG_HOME/xd.conf
+	ssh			$HOME/.ssh/config
+)
+
 exists todo && todo

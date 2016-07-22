@@ -1,0 +1,3 @@
+#compdef conf
+
+_arguments "1:Commands:(${(k)conf_locations})"

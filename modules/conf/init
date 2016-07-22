@@ -1,0 +1,22 @@
+#!/bin/zsh
+
+conf() {
+	local target=${conf_locations[${1}]}
+	if [[ -d ${target} ]]; then
+		cd ${target}
+		if ! [[ -w ${target} ]]; then
+			su
+		fi
+	elif [[ -f ${target} ]]; then
+		if ! [[ -w ${target} ]]; then
+			sudoedit ${target}
+		else
+			$EDITOR ${target}
+		fi
+	elif [[ -n ${target} ]]; then
+		echo "Conf target for $1 missing: $target"
+	else
+		echo "Unknown conf target: $1"
+	fi
+
+}

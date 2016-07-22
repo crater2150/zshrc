@@ -1,0 +1,8 @@
+#!/bin/zsh
+
+mpc() {
+	eval $(mpd-host get)
+	export MPD_HOST
+	export MPD_PORT
+	command mpc "$@"
+}

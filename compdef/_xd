@@ -1,0 +1,8 @@
+#compdef xd
+
+function _xd {
+	typeset -a targets
+	targets=("${(@f)$(xd -l)}")
+	_describe target targets
+}
+

@@ -4,7 +4,7 @@
 # daily use aliases
 ##############################################################################{{{
 
-alias ls="ls --color=auto"
+alias ls="ls -N --color=auto"
 alias ll="ls -hl --group-directories-first"
 alias lll="ls -hla"
 alias ds="du -sh"
@@ -55,6 +55,81 @@ cd(){
 #################################################################################
 # filesystem stuff
 ##############################################################################{{{
+
+t=${TAGSISTANT_ROOT:-$HOME/tagged}/store
+tagmount() {
+	tagsistant ${TAGSISTANT_ROOT:-$HOME/tagged} &>/tmp/tagsistant.$USER
+}
+
+tag() {
+	if [[ -z $2 ]]; then
+		printf "%s\n" \
+			"Usage: tag FILE... [-n name] [-v] [-p] TAG..." \
+			"" \
+			"Each TAG must end with the @ delimiter component." \
+			"Each File must have a name different from a single @"
+		return 1
+	fi
+	local name preview
+
+	zparseopts -D -E n:=name -name:=name  p=preview -preview=preview \
+		v=verbose -verbose=verbose
+
+	local sources=()
+	local tags=()
+
+	for i in "${@}"; do
+		if [[ ${i:t} == "@" ]]; then
+			tags+=${i}
+		else
+			sources+=${i:A}
+		fi
+	done
+
+	for source in "${sources[@]}"; do
+		for tag in "${tags[@]}"; do
+			target=~t/$tag
+			if [[ ! -d $target ]]; then mkdir -p $target; fi
+			if [[ -n $verbose ]]; then echo "Tagging $source with $tag"; fi
+			${=preview:+echo} ln -s $source $target/${name[2]}
+		done
+	done
+}
+
+papertag() {
+	if [[ -z $2 ]]; then
+		echo "Usage: papertag FILE [-v] [-y YEAR] [AUTHOR...] [:: OTHER TAGS]"
+		return 1
+	fi
+
+	local year
+	zparseopts -D -E y:=year -year:=year \
+		v=verbose -verbose=verbose
+
+	local paper=$1; shift
+
+	tag $verbose $paper paper/@
+	if [[ -n "$year" ]]; then
+		tag $verbose $paper meta:/year/eq/${year[2]}/@/
+	fi
+	while [[ -n $1 ]]; do 
+		local author=$1; shift
+		if [[ "$author" == "::" ]]; then break; fi
+		tag $verbose $paper meta:/author/eq/$author/@
+	done
+	for tag in "$@"; do
+		tag $verbose $paper $tag
+	done
+}
+
+tcd() {
+	rpath=$(realpath ~t/$1)
+	if [[ -d $rpath ]]; then
+		cd $rpath;
+	else
+		cd ${rpath:h}
+	fi
+}
 
 # count files in current or given directory
 count() {
@@ -116,7 +191,7 @@ suffix() {
 
 alias exifcopy="exiftool -tagsFromFile"
 photobydate() {
-	for i in (#i)*.(JPG|CR2); do
+	for i in ${*:-(#i)*.(JPG|CR2)}; do
 		dir=$(exiftool -p '$DateTimeOriginal' $i | tr ':' '-' | cut -d' ' -f1;)
 		mkdir -p $dir
 		mv ${i:r}.* $dir
@@ -159,6 +234,8 @@ svn() {
 			command svn "$@" ;;
 	esac
 }
+
+alias gitv='vim "$(git rev-parse --git-dir)/index" -c "Gitv --all" -c tabonly'
 
 #}}}
 

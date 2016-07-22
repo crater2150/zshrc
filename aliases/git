@@ -1,8 +1,8 @@
 #!/bin/zsh
 ginit() {
-    git init;
-    git add ${*:-"."};
-    git commit -a -m "Initial Commit"
+	git init;
+	git add ${*:-"."};
+	git commit -a -m "Initial Commit"
 }
 
 gst() {
@@ -27,3 +27,24 @@ alias gco="git checkout"
 alias ga="git add"
 alias gap="git add --patch"
 alias gpu="git push"
+
+
+gls() {
+	zmodload zsh/mapfile
+	gitignore="$(git rev-parse --show-toplevel 2>/dev/null)/.gitignore"
+	globalgitignore="$(git config core.excludesfile)"
+
+	typeset -a ignores
+	for i in $gitignore $globalgitignore; do
+		if [[ -e $i ]]; then
+			for ignore in "${(f)mapfile[$i]}"; do
+				ignores+="--ignore=$ignore"
+			done
+		fi
+	done
+
+	ls --color=auto -h $ignores "$@"
+}
+
+alias gll="gls -l"
+alias glll="gls -la"
