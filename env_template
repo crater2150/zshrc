@@ -1,16 +1,29 @@
-export ZDOTDIR="$HOME/.zsh"
+# path to your zsh configuration dir
+# this may be the path to this repo, if you use it per user
+# if you installed this repo to /etc/zsh/, this is the path for the per user
+# config, which can override global settings in /etc/zsh
+export ZDOTDIR=$HOME/.config/zsh
+
 PROMPT_UNICODE=yes
-zcpath="$ZDOTDIR"
+
+# below you can put user or server specific settings.
 
 # on foreign server I don't want to accidentaly alarm admins
-sudo() {
-	echo "no root here";
-}
-
-su() {
-	echo "no root here";
-}
+#sudo() {
+#	echo "no root here";
+#}
+#
+#su() {
+#	echo "no root here";
+#}
 
 # set modules to load. here: exclude highlight, because it is no fun over slow
 # connections
-ZMODLOAD_ONLY=( autoloader bindings completion vcs prompt )
+#ZMODLOAD_ONLY=( autoloader bindings completion vcs prompt )
+
+
+# make some programs use xdg basedirs
+#export MAILDIR=$HOME/.maildir export NOTMUCH_CONFIG=$HOME/.config/notmuch-config
+#export VIMINIT="let \$MYVIMRC=\"$XDG_CONFIG_HOME/vim/vimrc\" | source \$MYVIMRC"
+#export GVIMINIT="let \$MYGVIMRC=\"$XDG_CONFIG_HOME/vim/gvimrc\" | source \$MYGVIMRC"
+#export GNUPGHOME="$XDG_CONFIG_HOME"/gnupg
