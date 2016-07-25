@@ -13,8 +13,22 @@ setopt short_loops
 setopt cdable_vars
 
 # autoload completions
-fpath+=( "${ZDOTDIR:-/etc/zsh}/compdef" )
-autoload -U ${ZDOTDIR:-/etc/zsh}/compdef/*(:t)
+fpath+=( "${ZDOTDIR:+ZDOTDIR}/compdef" )
+fpath+=( "/etc/zsh/compdef" )
+autoload -U /etc/zsh/compdef/*(:t)
+
+if [[ -d $ZDOTDIR/compdef ]]; then
+	autoload -U /etc/zsh/compdef/*(N:t)
+fi
+
+# get a file from ZDOTDIR, return file in /etc/zsh if it does not exist
+zdotfile() {
+	if [[ -e $ZDOTDIR/$1 ]]; then
+		echo $ZDOTDIR/$1
+	else
+		echo /etc/zsh/$1
+	fi
+}
 
 bindkey -v
 
@@ -29,9 +43,9 @@ function exists { command -v "$@" >/dev/null }
 
 stty -ixon
 
-. ${ZDOTDIR:-/etc/zsh}/modules/loader.zsh && mod_init
+. $(zdotfile modules/loader.zsh) && mod_init
 
-for i in  ${ZDOTDIR:-/etc/zsh}/aliases/*~${ZDOTDIR:-/etc/zsh}/aliases/*.zwc; do
+for i in  ${ZDOTDIR:+ZDOTDIR/aliases/*~*.zwc(N)} /etc/zsh/aliases/*~*.zwc(N); do
     . $i
 done
 

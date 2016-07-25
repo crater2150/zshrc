@@ -7,25 +7,38 @@
 # Lets you load custom functions and zle widgets split into single files.
 #
 # zle widgets are stored in the "widgets" folder in your configuration directory
-# (set with $ZDOTDIR, see manpage. defaults to /etc/zsh)
+# (set with $ZDOTDIR, see manpage). The widgets in /etc/zsh/widgets are also
+# considered.
 #
 # functions are stored in the "functions" folder analogous.
 #
 
-ZWIDGETPATH=${ZWIDGETPATH:-"${ZDOTDIR:-/etc/zsh}/widgets"}
-ZFUNCTIONPATH=${ZFUNCTIONPATH:-"${ZDOTDIR:-/etc/zsh}/functions"}
-fpath+=( "${ZWIDGETPATH}" )
-fpath+=( "${ZFUNCTIONPATH}" )
-
-if [ -d $ZWIDGETPATH ]; then
-	for i in $ZWIDGETPATH/*(N:t); do
-		autoload -Uz  $i
-		zle -N $i
-	done
+if [[ -z $ZWIDGETPATH ]]; then
+	ZWIDGETPATH=( ${ZDOTDIR:+$ZDOTDIR/widgets} )
+	[[ -d /etc/zsh/widgets ]] && ZWIDGETPATH+=/etc/zsh/widgets
 fi
 
-if [ -d $ZFUNCTIONPATH ]; then
-	for i in $ZFUNCTIONPATH/*(N:t); do
-		autoload -Uz $i && $i
-	done
+if [[ -z $ZFUNCTIONPATH ]]; then
+	ZFUNCTIONPATH=( ${ZDOTDIR:+$ZDOTDIR/functions} )
+	[[ -d /etc/zsh/functions ]] && ZFUNCTIONPATH+=/etc/zsh/functions
 fi
+
+fpath+=(${ZWIDGETPATH})
+fpath+=(${ZFUNCTIONPATH})
+
+for dir in $ZWIDGETPATH; do
+	if [ -d $dir ]; then
+		for i in $dir/*~*.zwc(N:t); do
+			autoload -Uz  $i
+			zle -N $i
+		done
+	fi
+done
+
+for dir in $ZFUNCTIONPATH; do
+	if [ -d $dir ]; then
+		for i in $dir/*~*.zwc(N:t); do
+			autoload -Uz $i && $i
+		done
+	fi
+done

@@ -21,8 +21,23 @@
 #################################
 
 # Path to module directory
-ZMODPATH=${ZMODPATH:-"${ZDOTDIR:-/etc/zsh}/modules"}
-. $ZMODPATH/helpers.zsh
+if [[ -z $ZMODPATH ]]; then
+	ZMODPATH=( ${ZDOTDIR:+$ZDOTDIR/modules} )
+	[[ -d /etc/zsh/modules ]] && ZMODPATH+=/etc/zsh/modules
+fi
+
+local mod_path() {
+	for dir in $ZMODPATH; do
+		if [[ -e $dir/$1 ]]; then
+			echo "$dir/$1"
+			return 0
+		fi
+	done
+	return 1
+}
+
+
+. $(mod_path helpers.zsh)
 errdetails=""
 
 modqueue=( )
@@ -41,7 +56,7 @@ modqueue=( )
 #
 mod_queue() {
 	local module="$1"
-	local modsource="$ZMODPATH/$module"
+	local modsource=$(mod_path $module)
 
 	if ! mod_exists "$module" ; then
 		if [[ "$2" == "is_dep" ]]; then
@@ -65,7 +80,7 @@ mod_queue() {
 }
 
 mod_exists() {
-	[ -e "$ZMODPATH/$module" ]
+	mod_path "$1" &> /dev/null
 }
 
 # Checks for module dependencies
@@ -132,8 +147,8 @@ mod_check_dep() {
 mod_load() {
 	local MPATH
 	for module in "${(@)modqueue}"; do
-		MPATH="$ZMODPATH/$module"
-		[ -e "$ZMODPATH/$module/init" ] && . "$ZMODPATH/$module/init" 
+		MPATH=$(mod_path $module)
+		[ -e "$(mod_path $module)/init" ] && . "$(mod_path $module)/init" 
 	done
 }
 
@@ -146,14 +161,16 @@ mod_init() {
 
 	if [ -n "$ZMODLOAD_ONLY" ]; then
 		for module in "${(@)ZMODLOAD_ONLY}"; do
-			[ -d "$ZMODPATH/$module" ] && mod_queue "$module"
+			[ -d "$(mod_path $module)" ] && mod_queue "$module"
 		done
 	else
-		for module in $ZMODPATH/*(/N); do
-			if [ -z "$ZMODLOAD_BLACKLIST" ] \
-			|| ! in_array ${module:t} ${(@)ZMODLOAD_BLACKLIST}; then
-				mod_queue "${module:t}"
-			fi
+		for moddir in $ZMODPATH; do
+			for module in $moddir/*(/N); do
+				if [ -z "$ZMODLOAD_BLACKLIST" ] \
+					|| ! in_array ${module:t} ${(@)ZMODLOAD_BLACKLIST}; then
+					mod_queue "${module:t}"
+				fi
+			done
 		done
 	fi
 
