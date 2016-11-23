@@ -13,6 +13,8 @@ alias :q="exit"
 alias rget="rsync -rvP --append-verify --inplace"
 alias 7zu="7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on"
 
+alias f="noglob find . -iname"
+
 alias sudo="sudo "
 alias S='sudo $(history -n -1)'
 

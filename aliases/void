@@ -4,6 +4,13 @@ grep -q "void" /etc/os-release || return
 
 alias xq="xbps-query -Rs"
 
+alias xfiles="xbps-query -f"
+
+alias xupdate="xbps-install -Su"
+function xowner() {
+	xbps-query -Ro "*${1}*"
+}
+
 sv() {
 	command sv "$@"
 	if [[ "$1" == "up" ]]; then
