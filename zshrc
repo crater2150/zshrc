@@ -39,7 +39,7 @@ autoload -Uz zmv
 function exists { command -v "$@" >/dev/null }
 
 
-#ZMODLOAD_BLACKLIST=( prompt )
+ZMODLOAD_BLACKLIST=( ssh-agent )
 
 stty -ixon
 
