@@ -51,10 +51,10 @@ bindkey -s "^F" "fuck\n"
 
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.
-function zle-line-init () {
+local function zle-line-init () {
     echoti smkx
 }
-function zle-line-finish () {
+local function zle-line-finish () {
     echoti rmkx
 }
 zle -N zle-line-init

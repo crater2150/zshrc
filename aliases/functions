@@ -312,6 +312,10 @@ urlencode() {
 
 #}}}
 
+eth-ip() {
+	ip a show primary dev ${1:-/sys/class/net/en*~*/lo(:t)} | awk '/\s*inet / { split($2,a,"/");print a[1] }'
+}
+
 fasel-tunnel() {
 	if [[ -z "$1" || -z "$2" || "$1" == "-h" || "$1" == "--help" ]]; then
 		echo "Usage: fasel-tunnel <host> <port> [remote_port]"
