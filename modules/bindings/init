@@ -62,4 +62,19 @@ zle -N zle-line-finish
 
 insert_sudo () { zle beginning-of-line; zle -U "sudo " }
 zle -N insert-sudo insert_sudo
+
 bindkey "^[s" insert-sudo
+
+local function accept-or-recall-and-infer-history() {
+	if [[ -z $PREBUFFER$BUFFER ]]; then
+		zle up-line-or-history
+		zle infer-next-history
+
+	else
+		zle accept-and-infer-next-history -- "$@"
+	fi
+}
+zle -N  accept-or-recall-and-infer-history
+
+
+bindkey "\e^M" accept-or-recall-and-infer-history
