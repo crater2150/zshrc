@@ -105,6 +105,7 @@ function setprompt() {
 	i_width=${(S)infoline//\%\{*\%\}} # search-and-replace color escapes
 	i_width=${(%)i_width} # expand all escapes and count the chars
 	i_width=${#i_width} # expand all escapes and count the chars
+	((i_width += 1)) # workaround off by one, unknown reason
 
 	if [[ "$PROMPT_UNICODE" = "yes" ]]; then
 		filler="${rpscolor}${(l:$(( $COLUMNS - $i_width + 2))::─:)}"
