@@ -116,8 +116,14 @@ function setprompt() {
 
 	#middle info line
 
-	if mod_loaded vcs; then
-		middleline+=( "${rpscolor}${PR_VBAR} $(vcs_char) ${vcs_info_msg_0_}${reset}" )
+	middleline+=( "${rpscolor}${PR_VBAR} ")
+
+	if mod_loaded vcs && [[ -n ${vcs_info_msg_0_} ]]; then
+		middleline+=( "$(vcs_char) ${vcs_info_msg_0_}${reset}" )
+	fi
+
+	if mod_loaded project && [[ -n $ZPROJECT ]]; then
+		middleline+=( "${pathcolor}❰${ZPROJECT[name]}❱${reset}" )
 	fi
 
 	i_width=${(S)middleline//\%\{*\%\}} # search-and-replace color escapes
@@ -128,7 +134,7 @@ function setprompt() {
 	lines+=( ${(j::)infoline} )
 
 
-	[[ -n ${vcs_info_msg_0_} ]] && lines+=( "${middleline}${filler}${rpscolor}${PR_VBAR}" )
+	[[ $#middleline > 1 ]] && lines+=( "${middleline}${filler}${rpscolor}${PR_VBAR}" )
 	lines+=( "${CORNER_LD}${PVPREFIX} %(1j.${rpscolor}%j${reset} .)${usercolor}%#${reset} " )
 
 	### Finally, set the prompt

@@ -215,15 +215,6 @@ cropdetect() {
 # programming
 ##############################################################################{{{
 
-# cd for /code/projects dir with completion
-pp(){
-    if [ -d $HOME/code/projects/$* ]; then
-        cd $HOME/code/projects/$*
-    else
-        vim $HOME/code/projects/$*
-    fi
-}; 
-
 # watch latex file for changes and rebuild
 latexwatch() {
 	maindoc=$1

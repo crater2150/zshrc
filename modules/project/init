@@ -1,0 +1,56 @@
+#!/bin/zsh
+
+typeset -ag ZP_LIST
+
+local load-project-list() {
+	ZP_LIST=( $ZDOTDIR/projects/*(N:t) )
+}
+load-project-list
+
+project() {
+	case "$1" in
+		reload)
+			load-project-list
+			echo "${(j:\n:)ZP_LIST}"
+			;;
+		close)
+			unset ZPROJECT
+			;;
+		open)
+			shift
+			open-project "$@"
+			;;
+	esac
+}
+
+_project_open() {
+	_arguments "2:project:($ZP_LIST)" 
+	#_alternative "project:project:($ZP_LIST)" 
+}
+
+_project() {
+	_arguments "1:Action:->action" \
+		"*: :->args"
+	case "$state" in
+		action)
+			_arguments '1:action:(open close reload)'
+			;;
+		args)
+			_project_$words[2]
+			;;
+	esac
+}
+compdef _project project
+
+local open-project() {
+	typeset -gA ZPROJECT
+	ZPROJECT[name]="$1"
+	source $ZDOTDIR/projects/$1
+	pcd
+}
+
+pcd() {
+	cd ${ZPROJECT[path]}
+}
+
+alias pp=project
