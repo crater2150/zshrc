@@ -29,6 +29,9 @@ fork() {
 	( $* &>/dev/null & )
 }
 
+alias en="dict.cc.py de en"
+alias de="dict.cc.py en de"
+
 #}}}
 
 #################################################################################
@@ -322,4 +325,10 @@ fasel-tunnel() {
 	ssh -L $port:$host:$remote_port fasel -N &
 }
 
+tmpssh() {
+	dir=/tmp/${${1#*:}:t}
+	mkdir -p ${dir}
+	sshfs $1 ${dir}
+	cd ${dir}
+}
 # vim: foldmethod=marker
