@@ -1,49 +1,58 @@
 #!/bin/zsh
 ginit() {
-	git init;
-	git add ${*:-"."};
-	git commit -a -m "Initial Commit"
+    git init;
+    git add ${*:-"."};
+    git commit -a -m "Initial Commit"
 }
 
-gst() {
-	if [[ "${vcs_info_msg_0_[2,3]}" == 'hg' ]]; then
-		hg status "$@"
-	else
-		git status "$@"
-	fi
+# define a function that calls different versioning systems depending on
+# detected vcs for current directory
+# usage: defvcsfun <command name> <parameters for git> <parameters for hg> <parameters for svn>
+# see below for examples
+defvcsfun() {
+    local name=$1; shift
+    local args=($@)
+    eval "$name() {
+        case \$VCS_DETECTED in
+            git)
+                git ${=args[1]} \"\$@\";;
+            hg)
+                hg ${=args[2]} \"\$@\";;
+            svn)
+                svn ${=args[3]} \"\$@\";;
+            *)
+                echo \"unknown vcs: \$VCS_DETECTED\";;
+        esac
+    }"
 }
 
-gpl() {
-	if [[ "${vcs_info_msg_0_[2,3]}" == 'hg' ]]; then
-		hg pull "$@"
-	else
-		git pull "$@"
-	fi
-}
+#VCS      command   git             hg              svn
+defvcsfun gst       "status -s"     "status"        "status"
+defvcsfun gpl       "pull"          "pull"          "update"
+defvcsfun gcm       "commit"        "commit"        "commit"
+defvcsfun ga        "add"           "add"           "add"
+defvcsfun gpu       "push"          "push"          "i_am_not_distributed_please_dont_push_me"
 
-alias gca="git commit -a"
-alias gcm="git commit"
 alias gco="git checkout"
-alias ga="git add"
+alias gca="git commit -a"
 alias gap="git add --patch"
-alias gpu="git push"
 
 
 gls() {
-	zmodload zsh/mapfile
-	gitignore="$(git rev-parse --show-toplevel 2>/dev/null)/.gitignore"
-	globalgitignore="$(git config core.excludesfile)"
+    zmodload zsh/mapfile
+    gitignore="$(git rev-parse --show-toplevel 2>/dev/null)/.gitignore"
+    globalgitignore="$(git config core.excludesfile)"
 
-	typeset -a ignores
-	for i in $gitignore $globalgitignore; do
-		if [[ -e $i ]]; then
-			for ignore in "${(f)mapfile[$i]}"; do
-				ignores+="--ignore=$ignore"
-			done
-		fi
-	done
+    typeset -a ignores
+    for i in $gitignore $globalgitignore; do
+        if [[ -e $i ]]; then
+            for ignore in "${(f)mapfile[$i]}"; do
+                ignores+="--ignore=$ignore"
+            done
+        fi
+    done
 
-	ls --color=auto -h $ignores "$@"
+    ls --color=auto -h $ignores "$@"
 }
 
 alias gll="gls -l"
