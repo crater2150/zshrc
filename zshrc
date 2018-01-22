@@ -1,4 +1,3 @@
-
 HISTFILE=~/.histfile
 HISTSIZE=100000
 SAVEHIST=100000
@@ -15,15 +14,6 @@ setopt chase_links
 setopt short_loops
 setopt cdable_vars
 
-# autoload completions
-fpath+=( "${ZDOTDIR:+ZDOTDIR}/compdef" )
-fpath+=( "/etc/zsh/compdef" )
-autoload -U /etc/zsh/compdef/*(:t)
-
-if [[ -d $ZDOTDIR/compdef ]]; then
-	autoload -U /etc/zsh/compdef/*(N:t)
-fi
-
 # get a file from ZDOTDIR, return file in /etc/zsh if it does not exist
 zdotfile() {
 	if [[ -e $ZDOTDIR/$1 ]]; then
@@ -34,14 +24,9 @@ zdotfile() {
 }
 
 bindkey -v
-
-autoload -Uz compinit && compinit
 autoload -Uz zmv
 
-
 function exists { command -v "$@" >/dev/null }
-
-
 ZMODLOAD_BLACKLIST=( ssh-agent )
 
 stty -ixon
@@ -54,12 +39,6 @@ done
 
 echo $PATH | grep -q 'local' || . /etc/zsh/zprofile
 echo $PATH | grep -q 'sbin' || . /etc/zsh/zprofile
-
-
-zstyle ':completion:*' verbose yes
-zstyle ':completion:*:descriptions' format ‘%B%d%b’
-zstyle ':completion:*:messages' format ‘%d’
-zstyle ':completion:*:warnings' format ‘No matches for: %d’
 
 
 typeset -A conf_locations
@@ -75,5 +54,8 @@ conf_locations=(
 	xd			$XDG_CONFIG_HOME/xd.conf
 	ssh			$HOME/.ssh/config
 )
+
+
+. $(zdotfile completion.zsh)
 
 exists todo && todo

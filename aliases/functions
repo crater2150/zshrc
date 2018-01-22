@@ -44,7 +44,7 @@ alias E="exec zsh"
 
 # edit and refresh aliases
 aliases() {
-    sudo vim /etc/zsh/aliases/${1:-functions}
+    sudoedit /etc/zsh/aliases/${1:-functions}
     . /etc/zsh/aliases/*
 }
 
