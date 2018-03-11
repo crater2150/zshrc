@@ -1,3 +1,7 @@
 #compdef re
 
-_arguments -A "*" '-d[directory]:dirname:_dirs' ":script:_files -W $XDG_CONFIG_HOME/re/"
+_arguments -A "*" \
+	'--dir[directory]:dirname:_dirs' '-d[directory]:dirname:_dirs' \
+	'--dry-run[dont run, just display]' '-n[dont run, just display]' \
+	'--edit[open in editor]' '-e[open in editor]' \
+	":script:_files -W $XDG_CONFIG_HOME/re/"

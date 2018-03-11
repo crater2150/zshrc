@@ -1,6 +1,5 @@
 # autoload completions
-fpath+=( "${ZDOTDIR:+ZDOTDIR}/compdef" )
-fpath+=( "/etc/zsh/compdef" )
+fpath=( "${ZDOTDIR:+ZDOTDIR}/compdef" "/etc/zsh/compdef" $fpath )
 autoload -U /etc/zsh/compdef/*(:t)
 
 if [[ -d $ZDOTDIR/compdef ]]; then
