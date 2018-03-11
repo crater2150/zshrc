@@ -26,11 +26,6 @@ export XDG_DATA_HOME="$HOME/.local/share"
 # 077 would be more secure, but 022 is generally quite realistic
 umask 022
 
-PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${ROOTPATH}:$PATH"
-
-export PATH
-unset ROOTPATH
-
 shopts=$-
 set -$shopts
 unset sh shopts

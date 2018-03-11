@@ -1,0 +1,8 @@
+#compdef sv-manage
+
+typeset -A opt_args
+local context state line
+
+_arguments \
+    "1:Action:(add rm remove)"\
+    "*:service:_files -W /etc/sv"
