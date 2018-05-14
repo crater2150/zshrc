@@ -58,4 +58,7 @@ conf_locations=(
 
 . $(zdotfile completion.zsh)
 
+FZF_ALT_C_COMMAND="fd -t d"
+[[ -e /usr/share/doc/fzf/key-bindings.zsh ]] && . /usr/share/doc/fzf/key-bindings.zsh
+
 exists todo && todo
