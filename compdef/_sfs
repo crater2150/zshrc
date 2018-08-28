@@ -1,0 +1,15 @@
+#compdef sfs
+
+if compset -P 1 '*:'; then
+	_remote_files -- ssh
+elif compset -P 1 '*@'; then
+	_wanted hosts expl host _ssh_hosts -r: -S:
+else
+	_alternative \
+		'hosts:remote host name:_ssh_hosts -r: -S:' \
+		'users:user:_ssh_users -qS@'
+fi
+
+_ssh_users () {
+  _combination -s '[:@]' my-accounts users-hosts users "$@"
+}

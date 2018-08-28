@@ -75,6 +75,18 @@ local function accept-or-recall-and-infer-history() {
 	fi
 }
 zle -N  accept-or-recall-and-infer-history
-
-
 bindkey "\e^M" accept-or-recall-and-infer-history
+
+if exists incstring; then
+	local function inc-last-command() {
+		if [[ -z $BUFFER ]]; then
+		    BUFFER=$(incstring "$(history -n -1)");
+		else
+		    BUFFER=$(incstring "$BUFFER");
+		fi
+		zle vi-end-of-line
+	}
+	zle -N  inc-last-command
+	bindkey "^A" inc-last-command
+fi
+
