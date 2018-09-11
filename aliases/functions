@@ -25,6 +25,8 @@ alias S='sudo $(history -n -1)'
 alias rm="rm -I"
 alias v="xdg-open"
 
+alias vmemcache="vmtouch -l -m 12G -v"
+
 fork() {
 	( $* &>/dev/null & )
 }
