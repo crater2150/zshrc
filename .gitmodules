@@ -1,3 +1,6 @@
 [submodule "modules/highlight/zsh-syntax-highlighting"]
 	path = modules/highlight/zsh-syntax-highlighting
 	url = git://github.com/zsh-users/zsh-syntax-highlighting.git
+[submodule "zplug"]
+	path = zplug
+	url = https://github.com/b4b4r07/zplug
