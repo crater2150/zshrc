@@ -42,7 +42,14 @@ alias de="dict.cc.py en de"
 
 alias histoff="HISTFILE=/dev/null"
 alias histon="HISTFILE=$HOME/.histfile"
-alias E="exec zsh"
+E() {
+    if [[ -n $(jobs) ]]; then
+	echo "exec: You have suspended jobs."
+    else
+	builtin exec zsh
+    fi
+}
+
 
 # edit and refresh aliases
 aliases() {
