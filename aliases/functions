@@ -53,8 +53,8 @@ E() {
 
 # edit and refresh aliases
 aliases() {
-    sudoedit /etc/zsh/aliases/${1:-functions}
-    . /etc/zsh/aliases/*
+    $EDITOR $(zdotfile aliases/${1:-functions})
+    . $(zdotfile aliases)/*
 }
 
 # per directory configuration

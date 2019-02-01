@@ -1,12 +1,10 @@
 # autoload completions
-fpath=( "${ZDOTDIR:+ZDOTDIR}/compdef" "/etc/zsh/compdef" $fpath )
-autoload -U /etc/zsh/compdef/*(:t)
+fpath=( "${ZDOTDIR:+$ZDOTDIR/compdef}" "/etc/zsh/compdef" $fpath )
 
-if [[ -d $ZDOTDIR/compdef ]]; then
-	autoload -U /etc/zsh/compdef/*(N:t)
-fi
+[[ -n $(echo /etc/zsh/compdef/*(N:t)) ]] && autoload -U /etc/zsh/compdef/*(N:t)
+[[ -n $(echo $ZDOTDIR/compdef/*(N:t)) ]] && autoload -U $ZDOTDIR/compdef/*(N:t)
 
-autoload -Uz compinit && compinit
+autoload -Uz compinit && compinit -u
 
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*:descriptions' format ‘%B%d%b’

@@ -14,6 +14,8 @@ setopt chase_links
 setopt short_loops
 setopt cdable_vars
 
+export ZDOTDIR=${ZDOTDIR:-$HOME/.zsh}
+
 # get a file from ZDOTDIR, return file in /etc/zsh if it does not exist
 zdotfile() {
 	if [[ -e $ZDOTDIR/$1 ]]; then
@@ -33,7 +35,7 @@ stty -ixon
 
 . $(zdotfile modules/loader.zsh) && mod_init
 
-for i in  ${ZDOTDIR:+ZDOTDIR/aliases/*~*.zwc(N)} /etc/zsh/aliases/*~*.zwc(N); do
+for i in  ${ZDOTDIR:+$ZDOTDIR/aliases/*~*.zwc(N)} /etc/zsh/aliases/*~*.zwc(N); do
     . $i
 done
 
