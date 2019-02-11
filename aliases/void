@@ -3,6 +3,16 @@
 grep -q "void" /etc/os-release || return
 
 alias xq="xbps-query -Rs"
+xqn() {
+	if [[ -z $1 || -n $2 ]]; then
+		<<-HERE
+		Usage: xqn NAME
+		Search for NAME only in package names
+		HERE
+	else
+		xbps-query -Rs $1 | awk "\$2 ~ /$1/ { print }"
+	fi
+}
 
 alias xfiles="xbps-query -f"
 
