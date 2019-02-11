@@ -90,3 +90,4 @@ if exists incstring; then
 	bindkey "^A" inc-last-command
 fi
 
+bindkey "\eb" zle-bookmarks
