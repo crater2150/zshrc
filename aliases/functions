@@ -34,6 +34,15 @@ fork() {
 alias en="dict.cc.py de en"
 alias de="dict.cc.py en de"
 
+su() {
+    if [[ -z "$@" ]]; then
+	echo "Switching to sudo -s for enviromental reasons"
+	sudo -s
+    else
+	command su "$@"
+    fi
+}
+
 #}}}
 
 #################################################################################
