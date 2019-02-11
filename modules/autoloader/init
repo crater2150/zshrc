@@ -38,7 +38,7 @@ done
 for dir in $ZFUNCTIONPATH; do
 	if [ -d $dir ]; then
 		for i in $dir/*~*.zwc(N:t); do
-			autoload -Uz $i && $i
+			autoload -Uz $i
 		done
 	fi
 done

@@ -25,8 +25,10 @@ zdotfile() {
 	fi
 }
 
+. $(zdotfile completion.zsh)
+source $(zdotfile zplug.zsh)
+
 bindkey -v
-autoload -Uz zmv
 
 function exists { command -v "$@" >/dev/null }
 ZMODLOAD_BLACKLIST=( ssh-agent )
@@ -42,23 +44,6 @@ done
 echo $PATH | grep -q 'local' || . /etc/zsh/zprofile
 echo $PATH | grep -q 'sbin' || . /etc/zsh/zprofile
 
-
-typeset -A conf_locations
-conf_locations=(
-	vim         $XDG_CONFIG_HOME/vim
-	awesome     $XDG_CONFIG_HOME/awesome
-	mutt        $HOME/.mutt/muttrc
-	xd          $XDG_CONFIG_HOME/xd.conf
-	zsh         /etc/zsh
-	offlineimap $XDG_CONFIG_HOME/offlineimap/config
-	compose     $HOME/.XCompose.long
-	vdirsyncer  $HOME/.vdirsyncer/config
-	xd			$XDG_CONFIG_HOME/xd.conf
-	ssh			$HOME/.ssh/config
-)
-
-
-. $(zdotfile completion.zsh)
 
 FZF_ALT_C_COMMAND="fd -t d"
 [[ -e /usr/share/doc/fzf/key-bindings.zsh ]] && . /usr/share/doc/fzf/key-bindings.zsh

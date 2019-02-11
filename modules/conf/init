@@ -1,7 +1,26 @@
 #!/bin/zsh
 
+typeset -Ax conf_locations
+
 conf() {
-	local target=${conf_locations[${1}]}
+	if [[ $1 == -r ]]; then
+		local confconf=$(zdotfile confs)
+		if [[ -e $confconf ]]; then
+			conf_locations[conf]=$confconf
+			conf_locations+=( $(<$confconf) )
+		fi
+		return
+	fi
+
+	if [[ -z $1 ]]; then
+		echo "Available configs:"
+		for k v in ${(kv)conf_locations}; do
+			printf "%-20s %s\n" ${k}: ${(e)v}
+		done
+		return 1
+	fi
+
+	local target=${(e)conf_locations[${1}]}
 	if [[ -d ${target} ]]; then
 		cd ${target}
 		if ! [[ -w ${target} ]]; then
@@ -20,3 +39,5 @@ conf() {
 	fi
 
 }
+
+conf -r

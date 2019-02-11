@@ -1,3 +1,0 @@
-if exists thefuck; then
-	eval "$(thefuck --alias)"
-fi
