@@ -238,14 +238,6 @@ cropdetect() {
 # programming
 ##############################################################################{{{
 
-# watch latex file for changes and rebuild
-latexwatch() {
-	maindoc=$1
-	while : ; do
-		inotifywait -e modify $*; pdflatex -halt-on-error $maindoc
-	done  
-}
-
 svn() {
 	case $1 in
 		log|diff)
