@@ -4,6 +4,3 @@ for i in $ZDOTDIR/env/*.zsh; do
 	. $i
 done
 
-if [[ -e $ZDOTDIR/dirs ]]; then
-	source $ZDOTDIR/dirs
-fi

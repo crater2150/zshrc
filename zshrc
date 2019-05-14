@@ -25,6 +25,11 @@ zdotfile() {
 	fi
 }
 
+local dirfile=$(zdotfile dirs)
+if [[ -e $dirfile ]]; then
+	source $dirfile
+fi
+
 . $(zdotfile completion.zsh)
 source $(zdotfile zplug.zsh)
 
