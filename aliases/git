@@ -27,11 +27,11 @@ defvcsfun() {
 }
 
 #VCS      command   git             hg              svn
-defvcsfun gst       "status -s"     "status"        "status"
-defvcsfun gpl       "pull"          "pull"          "update"
-defvcsfun gcm       "commit"        "commit"        "commit"
-defvcsfun ga        "add"           "add"           "add"
-defvcsfun gpu       "push"          "push"          "i_am_not_distributed_please_dont_push_me"
+defvcsfun gst       "status -s"         "status"        "status"
+defvcsfun gpl       "pull --autostash"  "pull"          "update"
+defvcsfun gcm       "commit"            "commit"        "commit"
+defvcsfun ga        "add"               "add"           "add"
+defvcsfun gpu       "push"              "push"          "i_am_not_distributed_please_dont_push_me"
 
 alias gco="git checkout"
 alias gca="git commit -a"
@@ -57,3 +57,26 @@ gls() {
 
 alias gll="gls -l"
 alias glll="gls -la"
+
+gclone() {
+    local oldurl
+    local url=$1
+    shift
+    local git_hosts=(
+        gitlab2.informatik.uni-wuerzburg.de
+        github.com
+    )
+
+    for host in $git_hosts; do
+        if [[ "$url" =~ "^https://$host" ]]; then
+            oldurl=$url
+            url=${url//https:\/\/$host\//git@$host:}
+        fi
+    done
+
+    if [[ -n "$oldurl" ]]; then
+        echo "Correcting url to $url"
+    fi
+
+    git clone $url "$@"
+}
