@@ -97,7 +97,13 @@ function setprompt() {
 	[[ -w $PWD ]] && infoline+=( ${pathcolor} ) || infoline+=( ${ropathcolor} )
 	infoline+=( "${PVPREFIX} %(5~|%-1~/.../|)%3~ ${PVSUFFIX}${rpscolor}${PR_HBAR}" )
 
-	[[ -n "$VIRTUAL_ENV" ]] && infoline+=( "${usercolor}${PVPREFIX}venv: ${VIRTUAL_ENV:t}${PVSUFFIX}${rpscolor}" )
+	if [[ -n "$VIRTUAL_ENV" ]] then
+		local venvname=${VIRTUAL_ENV:t}
+		if [[ $venvname == "venv" ]]; then
+			venvname=${VIRTUAL_ENV:h:t}/${VIRTUAL_ENV:t}
+		fi
+		infoline+=( "${usercolor}${PVPREFIX}venv: ${venvname}${PVSUFFIX}${rpscolor}" )
+	fi
 	[[ -n "$CONDA_DEFAULT_ENV" ]] && infoline+=( "${usercolor}${PVPREFIX}conda: ${CONDA_DEFAULT_ENV}${PVSUFFIX}${rpscolor}" )
 
 	# Username & host
@@ -107,7 +113,7 @@ function setprompt() {
 	i_width=${(S)infoline//\%\{*\%\}} # search-and-replace color escapes
 	i_width=${(%)i_width} # expand all escapes and count the chars
 	i_width=${#i_width} # expand all escapes and count the chars
-	((i_width += 1)) # workaround off by one, unknown reason
+	((i_width += 2)) # workaround off by one, unknown reason
 
 	if [[ "$PROMPT_UNICODE" = "yes" ]]; then
 		filler="${rpscolor}${(l:$(( $COLUMNS - $i_width + 2))::─:)}"
