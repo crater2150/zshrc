@@ -1,0 +1,13 @@
+function parent-user() {
+    pid=${1:-$$}
+    uid=${2:-$(piduser $pid)}
+    stat=($(</proc/${pid}/stat))
+    ppid=${stat[4]}; echo $ppid
+    puid=$(piduser $ppid )
+
+    if [[ ${puid} != $uid ]]; then
+        echo ${puid}
+    elif [[ $ppid != 1 ]]; then
+        parent-user ${ppid}
+    fi
+}
