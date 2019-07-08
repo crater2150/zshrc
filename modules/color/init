@@ -75,5 +75,3 @@ else
 		fi
 	fi
 fi
-
-[[ -z "$LS_COLORS" ]] && [ -e /etc/DIR_COLORS ] && eval "$(dircolors /etc/DIR_COLORS)"
