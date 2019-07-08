@@ -24,11 +24,16 @@ zdotfile() {
 		echo /etc/zsh/$1
 	fi
 }
+try-source() {
+    for i in "$@"; do
+	if [[ -e "$i" ]]; then
+	    source $i
+	fi
+    done
+}
 
 local dirfile=$(zdotfile dirs)
-if [[ -e $dirfile ]]; then
-	source $dirfile
-fi
+try-source $dirfile
 
 . $(zdotfile completion.zsh)
 source $(zdotfile zplug.zsh)
