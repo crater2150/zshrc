@@ -1,6 +1,7 @@
 source $(zdotfile zplug/init.zsh)
 
 zplug "MichaelAquilina/zsh-you-should-use"
+zplug 'crater2150-zsh/fzf-widgets'
 
 zplug 'molovo/revolver', \
   as:command, \
@@ -12,3 +13,24 @@ zplug 'zunit-zsh/zunit', \
 
 zplug load
 
+
+if zplug check 'crater2150-zsh/fzf-widgets'; then
+  # Map widgets to key
+  bindkey '\ec' fzf-change-directory
+  bindkey '^r'  fzf-insert-history
+  bindkey '^xf' fzf-insert-files
+  bindkey '^xd' fzf-insert-directory
+  bindkey '^xn' fzf-insert-named-directory
+
+  # Start fzf in a tmux pane
+  FZF_WIDGET_TMUX=1
+
+  # use fd for finding directories and files
+  FZF_CHANGE_DIR_COMMAND="fd -t d"
+  FZF_INSERT_DIR_COMMAND="fd -t d"
+  FZF_INSERT_FILES_COMMAND="fd -t f"
+  FZF_EDIT_FILES_COMMAND="fd -t f"
+
+  # modify history command to remove duplicates
+  FZF_HISTORY_COMMAND="fc -l 1 | sed  's/ *[0-9]*  //g' | awk '!seen[\$0]++'"
+fi
