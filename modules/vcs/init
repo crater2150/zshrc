@@ -57,16 +57,12 @@ zstyle ':vcs_info:*' disable-patterns "${disable_pattern[@]}"
 	export VCS_DETECTED=$vcs
 }
 
-function vcs_char {
+vcs_char() {
 	case $VCS_DETECTED in 
-		git)
-			echo '±';;
-		hg)
-			echo '☿';;
-		svn)
-			echo '☣';;
-		*)
-			echo '#';;
+		git) echo '±';;
+		hg)  echo '☿';;
+		svn) echo '☣';;
+		*)   echo '#';;
 	esac
 }
 
