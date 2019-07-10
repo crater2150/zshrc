@@ -48,3 +48,4 @@ zstyle ':completion:*:processes-names' command  'ps c -u ${USER} -o command | un
 compdef _command fork
 compdef _command detach
 compdef _command ontv
+compdef _notmuch nmfind=notmuch-search

@@ -1,5 +1,3 @@
-. /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 
 if [[ "`tput colors`" == "256" ]] || [[ "`tput colors`" == "88" ]] ; then

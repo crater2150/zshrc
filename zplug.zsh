@@ -1,7 +1,13 @@
 source $(zdotfile zplug/init.zsh)
 
 zplug "MichaelAquilina/zsh-you-should-use"
+zplug 'jreese/zsh-titles'
+
 zplug 'crater2150-zsh/fzf-widgets'
+zplug 'crater2150-zsh/conf'
+zplug 'crater2150-zsh/chroma-z', as:theme
+
+zplug $ZDOTDIR/plugins/autoloader, from:local
 
 zplug 'molovo/revolver', \
   as:command, \
@@ -11,8 +17,10 @@ zplug 'zunit-zsh/zunit', \
   use:zunit, \
   hook-build:'./build.zsh'
 
-zplug load
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
+zplug $ZDOTDIR/plugins/highlight-config, from:local, defer:3
 
+zplug load
 
 if zplug check 'crater2150-zsh/fzf-widgets'; then
   # Map widgets to key

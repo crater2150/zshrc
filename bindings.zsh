@@ -1,8 +1,6 @@
 #!/bin/zsh
 
-# Allow <esc>:q in vim mode to exit the shell
-exit(){builtin exit;}
-zle -N q exit
+bindkey -v
 
 typeset -A key
 
@@ -17,15 +15,6 @@ key[Right]=${terminfo[kcuf1]}
 key[PageUp]=${terminfo[kpp]}
 key[PageDown]=${terminfo[knp]}
 
-bindkey -M vicmd ! edit-command-line-tmux
-
-#unicode input
-autoload -U insert-unicode-char
-zle -N insert-unicode-char
-bindkey "^Vu"  insert-unicode-char
-
-bindkey "\e."  insert-last-word
-
 [[ -n "${key[Home]}"     ]]  && bindkey  "${key[Home]}"     beginning-of-line
 [[ -n "${key[End]}"      ]]  && bindkey  "${key[End]}"      end-of-line
 [[ -n "${key[Insert]}"   ]]  && bindkey  "${key[Insert]}"   yank
@@ -37,17 +26,24 @@ bindkey "\e."  insert-last-word
 [[ -n "${key[PageUp]}"   ]]  && bindkey  "${key[PageUp]}"   history-beginning-search-backward
 [[ -n "${key[PageDown]}" ]]  && bindkey  "${key[PageDown]}" history-beginning-search-forward
 
-bindkey "^[e"   expand-cmd-path         # C-e for expanding path of typed command.
-bindkey " "     magic-space             # Do history expansion on space.
-bindkey $'\177'    backward-delete-char   #backspace
-bindkey $'\10'    backward-delete-word   #C-backspace
+bindkey "^[e"   expand-cmd-path        # C-e for expanding path of typed command.
+bindkey " "     magic-space            # Do history expansion on space.
+bindkey $'\177' backward-delete-char   # backspace
+bindkey $'\10'  backward-delete-word   # C-backspace
+
+bindkey -M vicmd ! edit-command-line-tmux
+
+#unicode input
+autoload -U insert-unicode-char
+zle -N insert-unicode-char
+bindkey "^Vu"  insert-unicode-char
+
+bindkey "\e."  insert-last-word
 
 bindkey "\e[1;5D" vi-backward-blank-word
 bindkey "\e[1;5C" vi-forward-blank-word
-#bindkey . rationalise-dot
 
 bindkey $'\20' push-line-or-edit
-bindkey -s "^F" "fuck\n"
 
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.
@@ -60,9 +56,8 @@ local function zle-line-finish () {
 zle -N zle-line-init
 zle -N zle-line-finish  
 
-insert_sudo () { zle beginning-of-line; zle -U "sudo " }
+insert_sudo () { zle beginning-of-line; zle -U "sudo "; zle end-of-line }
 zle -N insert-sudo insert_sudo
-
 bindkey "^[s" insert-sudo
 
 local function accept-or-recall-and-infer-history() {
@@ -89,5 +84,3 @@ if exists incstring; then
 	zle -N  inc-last-command
 	bindkey "^A" inc-last-command
 fi
-
-bindkey "\eb" zle-bookmarks

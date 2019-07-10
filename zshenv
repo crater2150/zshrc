@@ -1,4 +1,4 @@
-export ZDOTDIR=${XDG_CONFIG_HOME:-$HOME/.config}/zsh
+export ZDOTDIR="${$(readlink $HOME/.zshenv):h:a}"
 
 for i in $ZDOTDIR/env/*.zsh; do
 	. $i

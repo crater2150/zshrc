@@ -31,30 +31,25 @@ try-source() {
 	fi
     done
 }
+exists() { command -v "$@" >/dev/null }
 
 local dirfile=$(zdotfile dirs)
 try-source $dirfile
 
 . $(zdotfile completion.zsh)
+
 source $(zdotfile zplug.zsh)
 
-bindkey -v
-
-function exists { command -v "$@" >/dev/null }
-ZMODLOAD_BLACKLIST=( ssh-agent )
+. $(zdotfile bindings.zsh)
 
 stty -ixon
-
-. $(zdotfile modules/loader.zsh) && mod_init
 
 for i in  ${ZDOTDIR:+$ZDOTDIR/aliases/*~*.zwc(N)} /etc/zsh/aliases/*~*.zwc(N); do
     . $i
 done
 
-echo $PATH | grep -q 'local' || . /etc/zsh/zprofile
-echo $PATH | grep -q 'sbin' || . /etc/zsh/zprofile
-
+if ! (grep -q 'local' <<<$PATH && grep -q 'sbin'  <<<$PATH); then
+    . /etc/zsh/zprofile
+fi
 
 FZF_ALT_C_COMMAND="fd -t d"
-
-exists todo && todo
