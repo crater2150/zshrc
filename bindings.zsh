@@ -43,7 +43,7 @@ bindkey "\e."  insert-last-word
 bindkey "\e[1;5D" vi-backward-blank-word
 bindkey "\e[1;5C" vi-forward-blank-word
 
-bindkey $'\20' push-line-or-edit
+bindkey "^P" push-line-or-edit
 
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.
