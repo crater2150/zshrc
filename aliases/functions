@@ -222,7 +222,7 @@ suffix() {
 
 alias exifcopy="exiftool -tagsFromFile"
 photobydate() {
-	for i in ${*:-(#i)*.(JPG|CR2)}; do
+	for i in ${*:-(#i)*.(JPG|CR[23]|DNG)}; do
 	    if [[ -e $i ]]; then
 		dir=$(exiftool -p '$DateTimeOriginal' $i | tr ':' '-' | cut -d' ' -f1;)
 		mkdir -p $dir
