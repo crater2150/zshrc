@@ -47,6 +47,14 @@ su() {
     fi
 }
 
+loadgroup() {
+    if [[ -z $1 ]]; then
+	echo "Usage: loadgroup <new group name>"
+	return 1
+    fi
+    exec sg $1 newgrp $(id -gn)
+}
+
 #}}}
 
 #################################################################################
