@@ -20,6 +20,10 @@ zplug 'zunit-zsh/zunit', \
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug $ZDOTDIR/plugins/highlight-config, from:local, defer:3
 
+zplug "plugins/ng", from:oh-my-zsh
+
+zplug "zpm-zsh/colors"
+
 zplug load
 
 if zplug check 'crater2150-zsh/fzf-widgets'; then
@@ -34,7 +38,7 @@ if zplug check 'crater2150-zsh/fzf-widgets'; then
   FZF_WIDGET_TMUX=1
 
   # use fd for finding directories and files
-  FZF_CHANGE_DIR_COMMAND="fd -t d"
+  FZF_CHANGE_DIR_FIND_COMMAND="fd -t d"
   FZF_INSERT_DIR_COMMAND="fd -t d"
   FZF_INSERT_FILES_COMMAND="fd -t f"
   FZF_EDIT_FILES_COMMAND="fd -t f"
