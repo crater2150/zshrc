@@ -16,7 +16,16 @@ xqn() {
 
 alias xfiles="xbps-query -f"
 
-alias xupdate="xbps-install -Su"
+alias xupdate="sudo xbps-install -Su"
+function xupdate() {
+	sudo xbps-install -Su
+	if [[ $? == 16 ]]; then
+		xbps-install -Syu xbps
+		xupdate
+	fi
+
+}
+
 function xowner() {
 	xbps-query -Ro "*${1}*"
 }
