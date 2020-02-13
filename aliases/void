@@ -16,7 +16,6 @@ xqn() {
 
 alias xfiles="xbps-query -f"
 
-alias xupdate="sudo xbps-install -Su"
 function xupdate() {
 	sudo xbps-install -Su
 	if [[ $? == 16 ]]; then
