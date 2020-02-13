@@ -62,4 +62,4 @@ if exists stack; then
 fi
 
 exists todo && todo
-eval $(thefuck --alias)
+exists thefuck && eval $(thefuck --alias)
