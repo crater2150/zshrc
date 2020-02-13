@@ -5,6 +5,7 @@ fpath=( "${ZDOTDIR:+$ZDOTDIR/compdef}" "/etc/zsh/compdef" $fpath )
 [[ -n $(echo $ZDOTDIR/compdef/*(N:t)) ]] && autoload -U $ZDOTDIR/compdef/*(N:t)
 
 autoload -Uz compinit && compinit -u
+autoload -U +X bashcompinit && bashcompinit
 
 zstyle ':completion:*:descriptions' format ‘%B%d%b’
 zstyle ':completion:*:messages' format ‘%d’
@@ -29,7 +30,7 @@ zstyle :compinstall filename '/etc/zsh/completion'
 
 
 # completion for programs with standard gnu --help
-for prog in amm tapestry virtualenv; do
+for prog in amm tapestry virtualenv dragon; do
 	compdef _gnu_generic $prog
 done
 

@@ -16,6 +16,8 @@ setopt cdable_vars
 
 export ZDOTDIR=${ZDOTDIR:-$HOME/.zsh}
 
+function exists { command -v "$@" >/dev/null }
+
 # get a file from ZDOTDIR, return file in /etc/zsh if it does not exist
 zdotfile() {
 	if [[ -e $ZDOTDIR/$1 ]]; then
@@ -53,3 +55,11 @@ if ! (grep -q 'local' <<<$PATH && grep -q 'sbin'  <<<$PATH); then
 fi
 
 FZF_ALT_C_COMMAND="fd -t d"
+[[ -e /usr/share/doc/fzf/key-bindings.zsh ]] && . /usr/share/doc/fzf/key-bindings.zsh
+
+if exists stack; then
+	eval "$(stack --bash-completion-script stack)"
+fi
+
+exists todo && todo
+eval $(thefuck --alias)
