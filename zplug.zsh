@@ -28,6 +28,9 @@ zplug "clvv/fasd", as:command, use:fasd
 zplug "plugins/fasd", from:oh-my-zsh, if:"(( $+commands[fasd] ))", on:"clvv/fasd"
 
 zplug "xuhdev/k", at:gnu-ls-color
+zplug "urbainvaes/fzf-marks"
+
+zplug "crater2150-zsh/tmsu-fzf", as:plugin
 
 zplug load
 

@@ -84,3 +84,7 @@ if exists incstring; then
 	zle -N  inc-last-command
 	bindkey "^A" inc-last-command
 fi
+
+if zle -l tmsu-fzf-change-directory; then
+    bindkey "^t" tmsu-fzf-change-directory
+fi
