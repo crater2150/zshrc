@@ -1,5 +1,19 @@
 #!/bin/zsh
 
+hashafter () {
+	local fname=$1
+	eval "
+	function $fname() {
+		command $fname \"\$@\"
+		hash -r
+	}
+	"
+}
+
+hashafter xi
+hashafter xbps-install
+hashafter xbps-remove
+
 grep -q "void" /etc/os-release || return
 
 alias xq="xbps-query -Rs"
@@ -16,18 +30,18 @@ xqn() {
 
 alias xfiles="xbps-query -f"
 
-function xupdate() {
+xupdate() {
 	sudo xbps-install -Su
 	if [[ $? == 16 ]]; then
-		xbps-install -Syu xbps
+		sudo xbps-install -Syu xbps
 		xupdate
 	fi
-
 }
 
-function xowner() {
+xowner() {
 	xbps-query -Ro "*${1}*"
 }
+
 
 sv() {
 	command sv "$@"
