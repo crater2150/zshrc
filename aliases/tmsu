@@ -1,0 +1,41 @@
+#!/bin/zsh
+
+exists tmsu || return
+
+tag() {
+	separator=${@[(ie):]}
+	if [[ ${separator} -ge ${#@} ]]; then
+		echo "Usage: tag FILES... : TAGS..."
+		return 1
+	fi
+
+	for file in $@[1,$((separator - 1))]; do
+		tmsu tag --tags="${(j: :)*[$((separator + 1)),${#*}]}" $file
+	done
+}
+
+papertag() {
+	if [[ -z $2 ]]; then
+		echo "Usage: papertag FILE [-v] [-y YEAR] [AUTHOR...] [:: OTHER TAGS]"
+		return 1
+	fi
+
+	local year
+	zparseopts -D -E y:=year -year:=year \
+		v=verbose -verbose=verbose
+
+	local paper=$1; shift
+
+	tag $paper : paper
+	if [[ -n "$year" ]]; then
+		tag $verbose $paper meta:/year/eq/${year[2]}/@/
+	fi
+	while [[ -n $1 ]]; do 
+		local author=$1; shift
+		if [[ "$author" == "::" ]]; then break; fi
+		tag $verbose $paper meta:/author/eq/$author/@
+	done
+	for tag in "$@"; do
+		tag $verbose $paper $tag
+	done
+}
