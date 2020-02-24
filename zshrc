@@ -55,7 +55,6 @@ if ! (grep -q 'local' <<<$PATH && grep -q 'sbin'  <<<$PATH); then
 fi
 
 FZF_ALT_C_COMMAND="fd -t d"
-[[ -e /usr/share/doc/fzf/key-bindings.zsh ]] && . /usr/share/doc/fzf/key-bindings.zsh
 
 if exists stack; then
 	eval "$(stack --bash-completion-script stack)"
