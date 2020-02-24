@@ -60,7 +60,15 @@ alias glll="gls -la"
 
 gclone() {
     local oldurl
-    local url=$1
+    local url
+    if [[ -n $1 ]]; then
+        url=$1
+    else
+        echo "${fg_bold[green]}Getting url from cliboard:"
+        url=$(xclip -o -selection clipboard)
+        echo $url
+    fi
+
     shift
     local git_hosts=(
         gitlab2.informatik.uni-wuerzburg.de
@@ -70,7 +78,7 @@ gclone() {
     for host in $git_hosts; do
         if [[ "$url" =~ "^https://$host" ]]; then
             oldurl=$url
-            url=${url//https:\/\/$host\//git@$host:}
+            url=$(echo ${url//https:\/\/$host\//git@$host:} | grep -oe '^[^/]*/[^/]*')
         fi
     done
 
