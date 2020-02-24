@@ -8,6 +8,8 @@ zplug 'crater2150-zsh/conf'
 zplug 'crater2150-zsh/chroma-z', as:theme
 
 zplug $ZDOTDIR/plugins/autoloader, from:local
+zplug $ZDOTDIR/plugins/highlight-config, from:local, defer:3
+zplug $ZDOTDIR/plugins/bundled-compdefs, from:local
 
 zplug 'molovo/revolver', \
   as:command, \
@@ -18,7 +20,6 @@ zplug 'zunit-zsh/zunit', \
   hook-build:'./build.zsh'
 
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
-zplug $ZDOTDIR/plugins/highlight-config, from:local, defer:3
 
 zplug "plugins/ng", from:oh-my-zsh
 
