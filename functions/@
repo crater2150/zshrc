@@ -1,5 +1,0 @@
-#!/bin/zsh
-# for debugging: prefix any command with @ to print it before execution
-function @() {
-	echo "$*"; "$@"
-}

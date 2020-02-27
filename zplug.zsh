@@ -7,7 +7,6 @@ zplug 'crater2150-zsh/fzf-widgets'
 zplug 'crater2150-zsh/conf'
 zplug 'crater2150-zsh/chroma-z', as:theme
 
-zplug $ZDOTDIR/plugins/autoloader, from:local
 zplug $ZDOTDIR/plugins/highlight-config, from:local, defer:3
 zplug $ZDOTDIR/plugins/bundled-compdefs, from:local
 
