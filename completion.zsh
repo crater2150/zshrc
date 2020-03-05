@@ -11,7 +11,7 @@ zstyle ':completion:*:descriptions' format ‘%B%d%b’
 zstyle ':completion:*:messages' format ‘%d’
 zstyle ':completion:*:warnings' format ‘No matches for: %d’
 zstyle ':completion:*' use-cache on                                       
-zstyle ':completion:*' cache-path ~/.zsh/cache
+zstyle ':completion:*' cache-path ~/.cache/zsh
 zstyle ':completion:*' completer _complete _ignored _match _approximate _correct 
 zstyle ':completion:*:match:*' original only
 zstyle ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3))numeric)'
