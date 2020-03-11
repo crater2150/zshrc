@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+local forkprogs=(
+    geeqie
+    feh
+)
+
+for i in $forkprogs; do
+    alias $i="fork $i"
+done

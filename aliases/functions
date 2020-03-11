@@ -31,8 +31,9 @@ alias v="xdg-open"
 
 alias vmemcache="vmtouch -l -m 12G -v"
 
+
 fork() {
-	( $* &>/dev/null & )
+	"$@" &>/dev/null &|
 }
 
 alias en="dict.cc.py de en"
