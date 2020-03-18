@@ -157,13 +157,16 @@ suffix() {
 
 alias exifcopy="exiftool -tagsFromFile"
 photobydate() {
-	for i in ${*:-(#i)*.(JPG|CR[23]|DNG)}; do
-	    if [[ -e $i ]]; then
-		dir=$(exiftool -p '$DateTimeOriginal' $i | tr ':' '-' | cut -d' ' -f1;)
-		mkdir -p $dir
-		mv ${i:r}.* $dir
-	    fi
-	done
+    revolver start
+    for i in ${*:-(#i)*.(JPG|CR[23]|DNG)}; do
+	if [[ -e $i ]]; then
+	    revolver update $i
+	    dir=$(exiftool -p '$DateTimeOriginal' $i | tr ':' '-' | cut -d' ' -f1;)
+	    mkdir -p $dir
+	    mv ${i:r}.* $dir
+	fi
+    done
+    revolver stop
 }
 
 alias mkvidentify="mkvmerge --identify"
