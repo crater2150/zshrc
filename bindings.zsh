@@ -26,7 +26,7 @@ key[PageDown]=${terminfo[knp]}
 [[ -n "${key[PageUp]}"   ]]  && bindkey  "${key[PageUp]}"   history-beginning-search-backward
 [[ -n "${key[PageDown]}" ]]  && bindkey  "${key[PageDown]}" history-beginning-search-forward
 
-bindkey "^[e"   expand-cmd-path        # C-e for expanding path of typed command.
+bindkey "\ee"   expand-cmd-path        # A-e for expanding path of typed command.
 bindkey " "     magic-space            # Do history expansion on space.
 bindkey $'\177' backward-delete-char   # backspace
 bindkey $'\10'  backward-delete-word   # C-backspace
@@ -88,3 +88,7 @@ fi
 if zle -l tmsu-fzf-change-directory; then
     bindkey "^t" tmsu-fzf-change-directory
 fi
+
+zle-venv() { zle push-line; BUFFER="venv -t"; zle accept-line }
+zle -N zle-venv
+bindkey "\ev" zle-venv

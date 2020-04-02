@@ -13,6 +13,7 @@ setopt completeinword
 setopt chase_links
 setopt short_loops
 setopt cdable_vars
+WORDCHARS=${WORDCHARS//\/}
 
 export ZDOTDIR=${ZDOTDIR:-$HOME/.zsh}
 
