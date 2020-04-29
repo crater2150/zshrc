@@ -28,6 +28,7 @@ zdotfile() {
 	fi
 }
 try-source() {
+    local i=0
     for i in "$@"; do
 	if [[ -e "$i" ]]; then
 	    source $i
@@ -36,8 +37,9 @@ try-source() {
 }
 exists() { command -v "$@" >/dev/null }
 
-local dirfile=$(zdotfile dirs)
-try-source $dirfile
+function(){
+    try-source $(zdotfile dirs)
+}
 
 . $(zdotfile completion.zsh)
 
@@ -47,9 +49,12 @@ source $(zdotfile zplug.zsh)
 
 stty -ixon
 
-for i in  ${ZDOTDIR:+$ZDOTDIR/aliases/*~*.zwc(N)} /etc/zsh/aliases/*~*.zwc(N); do
-    . $i
-done
+function(){
+    local i=0
+    for i in  ${ZDOTDIR:+$ZDOTDIR/aliases/*~*.zwc(N)} /etc/zsh/aliases/*~*.zwc(N); do
+	. $i
+    done
+}
 
 if ! (grep -q 'local' <<<$PATH && grep -q 'sbin'  <<<$PATH); then
     . /etc/zsh/zprofile
