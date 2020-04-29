@@ -1,4 +1,5 @@
 awesome               $XDG_CONFIG_HOME/awesome
+alacritty             $XDG_CONFIG_HOME/alacritty/alacritty.yml
 compose               $HOME/.XCompose.long
 db                    $XDG_CONFIG_HOME/dmsearch/data/db_targets
 khal                  $XDG_CONFIG_HOME/khal/config

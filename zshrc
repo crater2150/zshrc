@@ -61,5 +61,12 @@ if exists stack; then
 	eval "$(stack --bash-completion-script stack)"
 fi
 
+if exists pyenv; then
+    eval "$(pyenv init -)"
+    if pyenv commands | grep -q 'virtualenv'; then
+	eval "$(pyenv virtualenv-init -)"
+    fi
+fi
+
 exists todo && todo
 exists thefuck && eval $(thefuck --alias)

@@ -27,7 +27,9 @@ alias sudo="sudo "
 alias S='sudo $(history -n -1)'
 
 alias rm="rm -I"
-alias v="xdg-open"
+function v() {
+    xdg-open "$@" &|
+    }
 
 alias vmemcache="vmtouch -l -m 12G -v"
 
@@ -113,6 +115,12 @@ pumount() {
 	else
 		command pumount "${params[@]}" "/media/$1"
 	fi
+}
+
+dl-source() {
+    for file in "$@"; do
+	getfattr --only-values -n user.xdg.origin.url "$file" 2>/dev/null && echo || echo "$file: no download source info" >&2
+    done
 }
 
 #}}}

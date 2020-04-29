@@ -10,6 +10,7 @@ zplug 'crater2150-zsh/chroma-z', as:theme
 zplug $ZDOTDIR/plugins/highlight-config, from:local, defer:3
 zplug $ZDOTDIR/plugins/bundled-compdefs, from:local
 zplug $ZDOTDIR/plugins/tmpsrc, from:local
+zplug $ZDOTDIR/plugins/pyenv, from:local
 
 zplug 'molovo/revolver', \
   as:command, \
@@ -24,9 +25,6 @@ zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "plugins/ng", from:oh-my-zsh
 
 zplug "zpm-zsh/colors"
-
-zplug "clvv/fasd", as:command, use:fasd
-zplug "plugins/fasd", from:oh-my-zsh, if:"(( $+commands[fasd] ))", on:"clvv/fasd"
 
 zplug "xuhdev/k", at:gnu-ls-color
 zplug "urbainvaes/fzf-marks"
