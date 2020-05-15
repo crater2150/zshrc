@@ -4,7 +4,12 @@ fpath=( "${ZDOTDIR:+$ZDOTDIR/compdef}" "/etc/zsh/compdef" $fpath )
 [[ -n $(echo /etc/zsh/compdef/*(N:t)) ]] && autoload -U /etc/zsh/compdef/*(N:t)
 [[ -n $(echo $ZDOTDIR/compdef/*(N:t)) ]] && autoload -U $ZDOTDIR/compdef/*(N:t)
 
-autoload -Uz compinit && compinit -u
+autoload -Uz compinit
+if [[ ${UID} -eq 0 ]] && [[ -n ${SUDO_USER} ]]; then
+	compinit -u
+else
+	compinit
+fi
 autoload -U +X bashcompinit && bashcompinit
 
 zstyle ':completion:*:descriptions' format ‘%B%d%b’
