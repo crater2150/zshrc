@@ -1,3 +1,4 @@
+export ZPLUG_HOME=$ZDOTDIR/zplug
 source $(zdotfile zplug/init.zsh)
 
 zplug "MichaelAquilina/zsh-you-should-use"

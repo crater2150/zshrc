@@ -4,12 +4,17 @@ fpath=( "${ZDOTDIR:+$ZDOTDIR/compdef}" "/etc/zsh/compdef" $fpath )
 [[ -n $(echo /etc/zsh/compdef/*(N:t)) ]] && autoload -U /etc/zsh/compdef/*(N:t)
 [[ -n $(echo $ZDOTDIR/compdef/*(N:t)) ]] && autoload -U $ZDOTDIR/compdef/*(N:t)
 
+ZSH_COMPDUMP_LOCATION=${XDG_CACHE_HOME:-$HOME/.cache/zsh/zcompdump-$ZSH_VERSION}
+mkdir -p ${ZSH_COMPDUMP_LOCATION:h}
+
 autoload -Uz compinit
 if [[ ${UID} -eq 0 ]] && [[ -n ${SUDO_USER} ]]; then
-	compinit -u
+	compinit -u -d $ZSH_COMPDUMP_LOCATION
 else
-	compinit
+	compinit -d $ZSH_COMPDUMP_LOCATION
 fi
+unset ZSH_COMPDUMP_LOCATION
+
 autoload -U +X bashcompinit && bashcompinit
 
 zstyle ':completion:*:descriptions' format ‘%B%d%b’

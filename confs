@@ -12,7 +12,7 @@ offlineimap           $XDG_CONFIG_HOME/offlineimap/config
 qutebrowser           $XDG_CONFIG_HOME/qutebrowser/
 qutebrowser-scripts   $XDG_DATA_HOME/qutebrowser/userscripts
 ssh                   $HOME/.ssh/config
-vdirsyncer            $HOME/.vdirsyncer/config
+vdirsyncer            $XDG_CONFIG_HOME/vdirsyncer/config
 vim                   $XDG_CONFIG_HOME/vim
 xd                    $XDG_CONFIG_HOME/xd.conf
 xd                    $XDG_CONFIG_HOME/xd.conf
