@@ -123,6 +123,9 @@ dl-source() {
     done
 }
 
+receive-subvolume() { nc -c -l -p $2 | btrfs receive -ve $1 }
+send-subvolume() { btrfs property set $1 ro true; btrfs send -v $1 | pv | nc -c nashorn.fritz.box $2 }
+
 #}}}
 
 #################################################################################
@@ -166,7 +169,7 @@ suffix() {
 alias exifcopy="exiftool -tagsFromFile"
 photobydate() {
     revolver start
-    for i in ${*:-(#i)*.(JPG|CR[23]|DNG)}; do
+    for i in ${*:-(#i)*.(JPG|CR[23]|DNG)(N)}; do
 	if [[ -e $i ]]; then
 	    revolver update $i
 	    dir=$(exiftool -p '$DateTimeOriginal' $i | tr ':' '-' | cut -d' ' -f1;)
@@ -294,4 +297,8 @@ tmpssh() {
 	sshfs $1 ${dir}
 	cd ${dir}
 }
+
+alias jdl="docopen $HOME/.jails/*/Downloads"
+alias vcat="nvimpager -c"
+
 # vim: foldmethod=marker

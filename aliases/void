@@ -31,10 +31,14 @@ xqn() {
 alias xfiles="xbps-query -f"
 
 xupdate() {
-	sudo xbps-install -Su
-	if [[ $? == 16 ]]; then
-		sudo xbps-install -Syu xbps
-		xupdate
+	if [[ -z "$@" ]]; then
+		sudo xbps-install -Su
+		if [[ $? == 16 ]]; then
+			sudo xbps-install -Syu xbps
+			xupdate
+		fi
+	else
+		sudo xbps-install -SA "$@"
 	fi
 }
 
