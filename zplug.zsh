@@ -9,7 +9,7 @@ zplug 'crater2150-zsh/conf'
 zplug 'crater2150-zsh/chroma-z', as:theme
 
 zplug $ZDOTDIR/plugins/highlight-config, from:local, defer:3
-zplug $ZDOTDIR/plugins/bundled-compdefs, from:local
+#zplug $ZDOTDIR/plugins/bundled-compdefs, from:local
 zplug $ZDOTDIR/plugins/tmpsrc, from:local
 zplug $ZDOTDIR/plugins/pyenv, from:local
 
