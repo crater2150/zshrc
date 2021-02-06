@@ -1,0 +1,15 @@
+#!/bin/zsh
+
+# detect debianoid systems
+# (not checking for apt here, as you can install it on other distros in addition
+# to their package manager)
+grep -iq 'ID_LIKE=debian' /etc/os-release || \
+	grep -iq 'NAME=Ubuntu' /etc/os-release || \
+	grep -iq 'NAME=Debian' /etc/os-release || \
+	return
+
+alias xq="apt-cache search"
+alias xi="apt-get install"
+alias xowner="dpkg -S"
+alias xfiles="dpkg -L"
+alias sv="systemctl"
