@@ -1,20 +1,11 @@
 #!/bin/zsh
 
-hashafter () {
-	local fname=$1
-	eval "
-	function $fname() {
-		command $fname \"\$@\"
-		hash -r
-	}
-	"
-}
+grep -q "void" /etc/os-release || return
 
 hashafter xi
 hashafter xbps-install
 hashafter xbps-remove
 
-grep -q "void" /etc/os-release || return
 
 alias xq="xbps-query -Rs"
 xqn() {
@@ -72,3 +63,6 @@ sv-manage() {
 			;;
 	esac
 }
+
+# renamed package binaries
+alias ts=moreutils_ts

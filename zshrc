@@ -35,6 +35,19 @@ try-source() {
 	fi
     done
 }
+
+# run hash -r after the given command. Useful for package manager commands that
+# change installed packages
+hashafter () {
+	local fname=$1
+	eval "
+	function $fname() {
+		command $fname \"\$@\"
+		hash -r
+	}
+	"
+}
+
 exists() { command -v "$@" >/dev/null }
 
 function(){
@@ -64,13 +77,6 @@ FZF_ALT_C_COMMAND="fd -t d"
 
 if exists stack; then
 	eval "$(stack --bash-completion-script stack)"
-fi
-
-if exists pyenv; then
-    eval "$(pyenv init -)"
-    if pyenv commands | grep -q 'virtualenv'; then
-	eval "$(pyenv virtualenv-init -)"
-    fi
 fi
 
 exists todo && todo

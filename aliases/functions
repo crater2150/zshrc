@@ -201,7 +201,6 @@ svn() {
 }
 
 alias gitv='vim "$(git rev-parse --git-dir)/index" -c "Gitv --all" -c tabonly'
-alias ipy=ipython3
 
 #}}}
 
