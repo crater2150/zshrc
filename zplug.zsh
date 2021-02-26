@@ -1,6 +1,8 @@
 export ZPLUG_HOME=$ZDOTDIR/zplug
 source $(zdotfile zplug/init.zsh)
 
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+
 zplug "MichaelAquilina/zsh-you-should-use"
 zplug 'jreese/zsh-titles'
 
@@ -29,6 +31,7 @@ zplug "zpm-zsh/colors"
 
 zplug "xuhdev/k", at:gnu-ls-color
 zplug "urbainvaes/fzf-marks"
+zplug "Aloxaf/fzf-tab"
 
 zplug "crater2150-zsh/tmsu-fzf", as:plugin
 
