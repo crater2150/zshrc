@@ -31,7 +31,6 @@ zplug "zpm-zsh/colors"
 
 zplug "xuhdev/k", at:gnu-ls-color
 zplug "urbainvaes/fzf-marks"
-zplug "Aloxaf/fzf-tab"
 
 zplug "crater2150-zsh/tmsu-fzf", as:plugin
 
