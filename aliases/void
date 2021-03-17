@@ -3,7 +3,6 @@
 grep -q "void" /etc/os-release || return
 
 hashafter xi
-hashafter xbps-install
 hashafter xbps-remove
 
 
@@ -21,15 +20,23 @@ xqn() {
 
 alias xfiles="xbps-query -f"
 
+xbps-install() {
+	sudo script --return --quiet -c "/usr/bin/xbps-install $*" /dev/null \
+		| tee /dev/stderr \
+		| grep -oP ".*(?=: post-install message)" \
+		| ifne xargs xbps-query -p install-msg
+	hash -r
+}
+
 xupdate() {
 	if [[ -z "$@" ]]; then
-		sudo xbps-install -Su
+		xbps-install -Su
 		if [[ $? == 16 ]]; then
-			sudo xbps-install -Syu xbps
+			xbps-install -Syu xbps
 			xupdate
 		fi
 	else
-		sudo xbps-install -SA "$@"
+		xbps-install -SA "$@"
 	fi
 }
 
