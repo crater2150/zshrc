@@ -191,14 +191,16 @@ cropdetect() {
 # programming
 ##############################################################################{{{
 
-svn() {
-	case $1 in
-		log|diff)
-			command svn "$@" | $PAGER ;;
-		*)
-			command svn "$@" ;;
-	esac
-}
+if [[ -n $PAGER ]]; then
+    svn() {
+	    case $1 in
+		    log|diff)
+			    command svn "$@" | $PAGER ;;
+		    *)
+			    command svn "$@" ;;
+	    esac
+    }
+fi
 
 alias gitv='vim "$(git rev-parse --git-dir)/index" -c "Gitv --all" -c tabonly'
 
