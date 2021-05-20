@@ -168,16 +168,16 @@ suffix() {
 
 alias exifcopy="exiftool -tagsFromFile"
 photobydate() {
-    revolver start
-    for i in ${*:-(#i)*.(JPG|CR[23]|DNG)(N)}; do
+    local imagefiles
+    imagefiles=( ${*:-(#i)*.(JPG|CR[23]|DNG)(N)} )
+    for i in ${imagefiles[@]}; do
 	if [[ -e $i ]]; then
-	    revolver update $i
-	    dir=$(exiftool -p '$DateTimeOriginal' $i | tr ':' '-' | cut -d' ' -f1;)
+	    dir=$(exiftool -p '$DateTimeOriginal' $i 2>/dev/null | tr ':' '-' | cut -d' ' -f1;)
 	    mkdir -p $dir
+	    printf "%s\n" ${i:r}.*
 	    mv ${i:r}.* $dir
 	fi
-    done
-    revolver stop
+    done | tqdm --total $#imagefiles --unit=imgs >> /dev/null
 }
 
 alias mkvidentify="mkvmerge --identify"
