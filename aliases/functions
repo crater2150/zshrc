@@ -251,7 +251,8 @@ btrfs-subvolume-force-delete() {
 
 # lazy shortcuts
 alias -g G="| grep"
-alias -g L="| less"
+alias -g L="| ${PAGER:-less}"
+alias -g LE="2>&1 | ${PAGER:-less}"
 alias -g T="| tail"
 
 # xclipboard
