@@ -56,7 +56,7 @@ local function zle-line-finish () {
 zle -N zle-line-init
 zle -N zle-line-finish  
 
-insert_sudo () { zle beginning-of-line; zle -U "sudo "; zle end-of-line }
+insert_sudo () { LBUFFER="sudo ${LBUFFER}" }
 zle -N insert-sudo insert_sudo
 bindkey "^[s" insert-sudo
 

@@ -60,3 +60,7 @@ compdef _command fork
 compdef _command detach
 compdef _command ontv
 compdef _notmuch nmfind=notmuch-search
+
+if exists kitty; then
+	kitty + complete setup zsh | source /dev/stdin
+fi

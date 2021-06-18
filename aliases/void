@@ -6,7 +6,9 @@ hashafter xi
 hashafter xbps-remove
 
 
-alias xq="xbps-query -Rs"
+xq() {
+	xbps-query -Rs "$@" | grep -v -- '-32bit'
+}
 xqn() {
 	if [[ -z $1 || -n $2 ]]; then
 		<<-HERE
