@@ -1,5 +1,6 @@
 export PYENV_ROOT=${XDG_DATA_HOME:-$HOME/.local/share}/pyenv
 _init_pyenv() {
+    unfunction _pyenv
     export PATH="$PATH:$PYENV_ROOT/bin"
     eval "$(pyenv init -)"
     if pyenv commands | grep -q 'virtualenv'; then
@@ -7,7 +8,10 @@ _init_pyenv() {
     fi
 }
 if [[ -d $PYENV_ROOT ]]; then
-    _init_pyenv
+    pyenv() {
+	_init_pyenv
+	pyenv $@
+    }
 else
     pyenv() {
 	echo -n "pyenv is not installed. Install now? [yn] "; read -q || return
