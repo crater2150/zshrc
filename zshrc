@@ -79,5 +79,4 @@ if exists stack; then
 	eval "$(stack --bash-completion-script stack)"
 fi
 
-exists todo && todo
 exists thefuck && eval $(thefuck --alias)
