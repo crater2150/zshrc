@@ -80,3 +80,9 @@ if exists stack; then
 fi
 
 exists thefuck && eval $(thefuck --alias)
+
+_prompt_todos() {
+    local todos=$(rg -l '^STATUS:NEEDS-ACTION' $HOME/.calendars | wc -l)
+    [[ $todos -gt 0 ]] && echo "Todos: $todos"
+}
+__chromaz_extra_left+=_prompt_todos
