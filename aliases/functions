@@ -302,4 +302,6 @@ tmpssh() {
 alias jdl="docopen $HOME/.jails/*/Downloads"
 alias vcat="nvimpager -c"
 
+alias icat="kitty +kitten icat"
+
 # vim: foldmethod=marker

@@ -17,3 +17,5 @@ vim                   $XDG_CONFIG_HOME/vim
 xd                    $XDG_CONFIG_HOME/xd.conf
 xd                    $XDG_CONFIG_HOME/xd.conf
 zsh                   $ZDOTDIR
+kitty                 $XDG_CONFIG_HOME/kitty/kitty.conf
+kitty-sessions        $XDG_CONFIG_HOME/kitty/sessions
