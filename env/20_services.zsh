@@ -1,3 +1,3 @@
-if [[ $DISPLAY ]]; then
+if [[ $DISPLAY && $UID != 0 ]]; then
 	export SVDIR="$HOME/.local/session_service"
 fi

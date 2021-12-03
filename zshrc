@@ -14,6 +14,7 @@ setopt chase_links
 setopt short_loops
 setopt cdable_vars
 WORDCHARS=${WORDCHARS//\/}
+cdpath+=$HOME
 
 export ZDOTDIR=${ZDOTDIR:-$HOME/.zsh}
 

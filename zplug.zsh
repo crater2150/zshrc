@@ -29,7 +29,6 @@ zplug "plugins/ng", from:oh-my-zsh
 
 zplug "zpm-zsh/colors"
 
-zplug "xuhdev/k", at:gnu-ls-color
 zplug "urbainvaes/fzf-marks"
 
 zplug "crater2150-zsh/tmsu-fzf", as:plugin

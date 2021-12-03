@@ -28,8 +28,10 @@ alias S='sudo $(history -n -1)'
 
 alias rm="rm -I"
 function v() {
-    xdg-open "$@" &|
-    }
+    for file in $@; do
+	xdg-open $file &|
+    done
+}
 
 alias vmemcache="vmtouch -l -m 12G -v"
 
@@ -43,8 +45,8 @@ alias de="dict.cc.py en de"
 
 su() {
     if [[ -z "$@" ]]; then
-	echo "Switching to sudo -s for enviromental reasons"
-	sudo -s
+	echo "Switching to sudo -i for enviromental reasons"
+	sudo -i
     else
 	command su "$@"
     fi
@@ -305,3 +307,7 @@ alias vcat="nvimpager -c"
 alias icat="kitty +kitten icat"
 
 # vim: foldmethod=marker
+
+function lastdl() {
+    echo ~/downloads/*(oc.[1])
+}
