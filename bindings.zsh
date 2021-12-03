@@ -89,6 +89,6 @@ if zle -l tmsu-fzf-change-directory; then
     bindkey "^t" tmsu-fzf-change-directory
 fi
 
-zle-venv() { zle push-line; BUFFER="venv -t"; zle accept-line }
+zle-venv() { zle push-line; BUFFER="venv"; zle accept-line }
 zle -N zle-venv
 bindkey "\ev" zle-venv

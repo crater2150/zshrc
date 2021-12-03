@@ -1,8 +1,10 @@
 export PYENV_ROOT=${XDG_DATA_HOME:-$HOME/.local/share}/pyenv
 _init_pyenv() {
     unfunction pyenv
-    export PATH="$PATH:$PYENV_ROOT/bin"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init --path)"
     eval "$(pyenv init -)"
+    source $(pyenv root)/completions/pyenv.zsh
     if pyenv commands | grep -q 'virtualenv'; then
 	eval "$(pyenv virtualenv-init -)"
     fi
