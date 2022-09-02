@@ -313,3 +313,5 @@ alias icat="kitty +kitten icat"
 function lastdl() {
     echo ~/downloads/*(oc.[1])
 }
+
+alias mpvu="noglob mpv"
