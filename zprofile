@@ -29,3 +29,7 @@ umask 022
 shopts=$-
 set -$shopts
 unset sh shopts
+
+if [[ $TTY == /dev/tty1 ]]; then
+	exec startx :1
+fi
