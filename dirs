@@ -1,1 +1,3 @@
 m=/run/media/$USER/
+j=${XDG_DATA_HOME}/jails
+rc=${j}/webapp-rocketchat/Downloads
