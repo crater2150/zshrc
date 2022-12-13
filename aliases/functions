@@ -258,6 +258,8 @@ alias -g T="| tail"
 alias -g XS='$(xclip -o -selection primary)'
 alias -g XC='$(xclip -o -selection clipboard)'
 
+alias -g GITROOT='$(git rev-parse --show-toplevel)'
+
 alias -s log=vimpager
 #}}}
 
