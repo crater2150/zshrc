@@ -1,3 +1,5 @@
+typeset -gA ZSH_HIGHLIGHT_STYLES
+
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 
 if [[ "`tput colors`" == "256" ]] || [[ "`tput colors`" == "88" ]] ; then

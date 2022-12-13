@@ -1,0 +1,15 @@
+zmodule jreese/zsh-titles
+
+zmodule crater2150-zsh/fzf-widgets
+zmodule crater2150-zsh/conf
+zmodule crater2150-zsh/chroma-z
+
+zmodule $ZDOTDIR/plugins/tmpsrc
+zmodule $ZDOTDIR/plugins/pyenv
+
+zmodule $ZDOTDIR/plugins/highlight-config
+zmodule zsh-users/zsh-syntax-highlighting
+
+zmodule ohmyzsh/ohmyzsh --root plugins/ng
+
+zmodule urbainvaes/fzf-marks
