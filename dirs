@@ -1,1 +1,2 @@
 m=/run/media/$USER/
+rc=$HOME/.local/share/jails/webapp-rocketchat/

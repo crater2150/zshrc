@@ -80,7 +80,7 @@ E() {
 # edit and refresh aliases
 aliases() {
     $EDITOR $(zdotfile aliases/${1:-functions})
-    . $(zdotfile aliases)/*
+    source $(zdotfile aliases)/*
 }
 
 # per directory configuration
