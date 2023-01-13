@@ -57,8 +57,6 @@ function(){
     try-source $(zdotfile dirs)
 }
 
-. $(zdotfile completion.zsh)
-
 
 ZIM_HOME=${XDG_CACHE_HOME:-$HOME/.cache}/zim
 if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
@@ -71,6 +69,7 @@ fi
 source ${ZIM_HOME}/init.zsh
 
 
+. $(zdotfile completion.zsh)
 #source $(zdotfile zplug.zsh)
 
 . $(zdotfile bindings.zsh)

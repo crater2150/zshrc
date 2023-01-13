@@ -1,6 +1,6 @@
 zmodule jreese/zsh-titles
 
-zmodule crater2150-zsh/fzf-widgets
+zmodule SmartFinn/fzf-widgets
 zmodule crater2150-zsh/conf
 zmodule crater2150-zsh/chroma-z
 
