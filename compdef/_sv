@@ -1,7 +1,7 @@
 #compdef sv
 
 # completion for runit sv(1)
-# Christian Neukirchen <chneukirchen@gmail.com>
+# Leah Neukirchen <leah@vuxu.org>
 # runit 2.1.1, services in /var/service are completed by default
 
 local ret=1 services
@@ -35,10 +35,12 @@ cmds)
         check
     ret=0;;
 args)
-    if [[ $BUFFER == sudo* ]] then
-	    services=( /var/service/*(-/N:t) )
+    if [[ $BUFFER == "sudo "*
+        || $BUFFER == "doas "*
+        || $BUFFER == "su "*-c* ]] then
+        services=( /var/service/*(-/N:t) )
     else
-	    services=( ${SVDIR:-/var/service}/*(-/N:t) )
+        services=( ${SVDIR:-/var/service}/*(-/N:t) )
     fi
     (( $#services )) && _values services $services && ret=0
     [[ $words[CURRENT] = */* ]] && _directories && ret=0

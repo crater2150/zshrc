@@ -5,4 +5,4 @@ local context state line
 
 _arguments \
     "1:Action:(add rm remove)"\
-    "*:service:_files -W /etc/sv"
+    "*:service:_files -W ${SVDIR_TEMPLATES:-/etc/sv}"
