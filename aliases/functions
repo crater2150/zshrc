@@ -311,6 +311,49 @@ alias luarocks="luarocks --local"
 
 alias icat="kitty +kitten icat"
 
+local function hour-float-to-time() {
+    printf "%d:%02dh" $1 $(( $1 * 60 % 60 ))
+}
+
+batstat() {
+    for bat in /sys/class/power_supply/BAT*; do
+	local energy_full=$(<$bat/energy_full)
+	local energy_now=$(<$bat/energy_now)
+	local power_now=$(<$bat/power_now)
+	local bat_status=$(<$bat/status)
+	local remain_text
+	local remain
+	case $bat_status in
+	    Charging)
+		remain=$(((energy_full - energy_now) / power_now))
+		remain_text=", $(hour-float-to-time $remain) until full"
+		;;
+	    Discharging)
+		remain=$((energy_now / power_now))
+		remain_text=", $(hour-float-to-time $remain) left"
+		;;
+	    *)
+		remain_text=""
+		;;
+	esac
+
+	printf "%s: %.1f %%, %s%s\n" \
+	    ${bat:t} \
+	    $(( energy_now * 100.0 / energy_full )) \
+	    $bat_status \
+	    $remain_text
+    done
+}
+
+if [[ $DISPLAY ]] && xinput | grep -q Wacom && xrandr | grep -q eDP1; then
+    xrandr() {
+	command xrandr $@
+	for dev in $(xinput | grep Wacom | grep -oP '(?<=id=)\d*'); do
+	    xinput map-to-output $dev eDP1
+	done
+    }
+fi
+
 # vim: foldmethod=marker
 
 function lastdl() {

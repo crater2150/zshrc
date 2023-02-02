@@ -3,7 +3,7 @@ source $(zdotfile zplug/init.zsh)
 
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
-zplug "MichaelAquilina/zsh-you-should-use"
+#zplug "MichaelAquilina/zsh-you-should-use"
 zplug 'jreese/zsh-titles'
 
 zplug 'crater2150-zsh/fzf-widgets'
@@ -40,6 +40,7 @@ if zplug check 'crater2150-zsh/fzf-widgets'; then
   bindkey '\ec' fzf-change-directory
   bindkey '^r'  fzf-insert-history
   bindkey '^xf' fzf-insert-files
+  bindkey '^xF' fzf-insert-files-global
   bindkey '^xd' fzf-insert-directory
   bindkey '^xn' fzf-insert-named-directory
 
@@ -49,7 +50,7 @@ if zplug check 'crater2150-zsh/fzf-widgets'; then
   # use fd for finding directories and files
   FZF_CHANGE_DIR_FIND_COMMAND="fd -t d"
   FZF_INSERT_DIR_COMMAND="fd -t d"
-  FZF_INSERT_FILES_COMMAND="fd -t f"
+  FZF_INSERT_FILE_COMMAND="fd -t f . $HOME"
   FZF_EDIT_FILES_COMMAND="fd -t f"
 
   # modify history command to remove duplicates

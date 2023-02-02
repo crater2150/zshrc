@@ -62,12 +62,12 @@ sv-manage() {
 	case "$action" in
 		add)
 			for service in "$@"; do
-				ln -s /etc/sv/${service:s#/##} /var/service
+				ln -s ${SVDIR_TEMPLATES:-/etc/sv}/${service:s#/##} ${SVDIR:-/var/service}
 			done
 			;;
 		remove|rm)
 			for service in "$@"; do
-				rm /var/service/${service:s#/##}
+				rm  ${SVDIR:-/var/service}/${service:s#/##}
 			done
 			;;
 	esac

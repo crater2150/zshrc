@@ -1,6 +1,15 @@
 # /etc/zsh/zprofile
 # $Header: /var/cvsroot/gentoo-x86/app-shells/zsh/files/zprofile-1,v 1.1 2010/08/15 12:21:56 tove Exp $
 
+append_path () {
+    case ":$PATH:" in
+        *:"$1":*)
+            ;;
+        *)
+            PATH="${PATH:+$PATH:}$1"
+    esac
+}
+
 # Load environment settings from profile.env, which is created by
 # env-update from the files in /etc/env.d
 if [ -e /etc/profile.env ] ; then

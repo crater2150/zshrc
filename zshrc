@@ -102,3 +102,7 @@ if [[ -e $HOME/.calendars ]]; then
     }
     __chromaz_extra_left+=_prompt_todos
 fi
+# >>> scala-cli completions >>>
+fpath=("/home/crater2150/.local/share/scalacli/completions/zsh" $fpath)
+compinit
+# <<< scala-cli completions <<<
