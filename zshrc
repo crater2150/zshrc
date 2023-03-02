@@ -71,8 +71,6 @@ source ${ZIM_HOME}/init.zsh
 
 
 . $(zdotfile completion.zsh)
-#source $(zdotfile zplug.zsh)
-
 . $(zdotfile bindings.zsh)
 
 stty -ixon
