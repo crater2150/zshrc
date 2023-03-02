@@ -102,7 +102,11 @@ if [[ -e $HOME/.calendars ]]; then
     }
     __chromaz_extra_left+=_prompt_todos
 fi
-# >>> scala-cli completions >>>
-fpath=("/home/crater2150/.local/share/scalacli/completions/zsh" $fpath)
-compinit
-# <<< scala-cli completions <<<
+
+if exists mail; then
+    _prompt_cron_mails() {
+	local newmails=$(mail -Hf $MAIL | grep -c '^.N')
+	[[ $newmails -gt 0 ]] && echo "Cron Notifications: $newmails"
+    }
+    __chromaz_extra_left+=_prompt_cron_mails
+fi

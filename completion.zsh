@@ -1,5 +1,6 @@
 # autoload completions
 fpath=( "${ZDOTDIR:+$ZDOTDIR/compdef}" "/etc/zsh/compdef" $fpath )
+fpath=("$XDG_DATA_HOME/scalacli/completions/zsh" $fpath)
 
 [[ -n $(echo /etc/zsh/compdef/*(N:t)) ]] && autoload -U /etc/zsh/compdef/*(N:t)
 [[ -n $(echo $ZDOTDIR/compdef/*(N:t)) ]] && autoload -U $ZDOTDIR/compdef/*(N:t)

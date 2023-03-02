@@ -13,6 +13,8 @@ alias :q="exit"
 alias rget="rsync -rP --append-verify --inplace"
 alias 7zu="7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on"
 
+alias cronmail="mutt -f $MAIL"
+
 if ! command -v fd >/dev/null; then
     fd() {
 	if [[ "$1" =~ "-*" ]]; then
