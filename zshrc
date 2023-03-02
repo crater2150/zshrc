@@ -12,13 +12,14 @@ setopt hist_ignore_space share_history
 #setopt hist_ignore_all_dups
 setopt no_auto_remove_slash auto_param_slash
 setopt completeinword
-setopt chase_links
+#setopt chase_links
 setopt short_loops
 setopt cdable_vars
 WORDCHARS=${WORDCHARS//\/}
 cdpath+=$HOME
 
 export ZDOTDIR=${ZDOTDIR:-$HOME/.zsh}
+fpath=($ZDOTDIR/functions $fpath)
 
 function exists { command -v "$@" >/dev/null }
 
