@@ -1,4 +1,4 @@
-zmodule jreese/zsh-titles
+zmodule jreese/zsh-titles -n titles
 
 zmodule SmartFinn/fzf-widgets
 zmodule crater2150-zsh/conf
@@ -10,6 +10,6 @@ zmodule $ZDOTDIR/plugins/pyenv
 zmodule $ZDOTDIR/plugins/highlight-config
 zmodule zsh-users/zsh-syntax-highlighting
 
-zmodule ohmyzsh/ohmyzsh --root plugins/ng
+zmodule ohmyzsh/ohmyzsh --root plugins/ng --fpath ./
 
 zmodule urbainvaes/fzf-marks
