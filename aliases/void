@@ -39,6 +39,7 @@ xupdate() {
 		fi
 	else
 		xbps-install -SA "$@"
+		xcheckupdates
 	fi
 }
 

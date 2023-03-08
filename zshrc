@@ -105,6 +105,7 @@ fi
 
 if exists mail; then
     _prompt_cron_mails() {
+	[[ ! -e $MAIL ]] && return
 	local newmails=$(mail -Hf $MAIL | grep -c '^.N')
 	[[ $newmails -gt 0 ]] && echo "Cron Notifications: $newmails"
     }
