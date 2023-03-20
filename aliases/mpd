@@ -1,5 +1,23 @@
 #!/bin/zsh
 
+mpd-host() {
+	case "$1" in
+		set)
+			echo "MPD_HOST='$2';MPD_PORT='$3'" > ~/.cache/mpd-host.zsh
+			;;
+		get)
+			if [ ! -f ~/.cache/mpd-host.zsh ]; then
+				echo "MPD_HOST='localhost';MPD_PORT='6600'" > ~/.cache/mpd-host.zsh
+			fi
+			cat ~/.cache/mpd-host.zsh
+			;;
+		*)
+			echo "Usage: mpd-host set HOST PORT"
+			echo "       mpd-host get"
+			;;
+	esac
+}
+
 mpc() {
 	eval $(mpd-host get)
 	export MPD_HOST
