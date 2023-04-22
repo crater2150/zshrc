@@ -47,7 +47,7 @@ gls() {
     for i in $gitignore $globalgitignore; do
         if [[ -e $i ]]; then
             for ignore in "${(f)mapfile[$i]}"; do
-                ignores+="--ignore=$ignore"
+                ignores+="--ignore=${ignore%/}"
             done
         fi
     done
