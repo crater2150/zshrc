@@ -27,7 +27,9 @@ xbps-install() {
 		| tee /dev/stderr \
 		| grep -oP ".*(?=: post-install message)" \
 		| ifne xargs -L 1 xbps-query -p install-msg
+	ret=$?
 	hash -r
+	return $ret
 }
 
 xupdate() {
