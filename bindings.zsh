@@ -1,4 +1,5 @@
 #!/bin/zsh
+fpath=( "${ZDOTDIR:+$ZDOTDIR/widgets}" $fpath )
 
 bindkey -v
 
@@ -31,7 +32,7 @@ bindkey " "     magic-space            # Do history expansion on space.
 bindkey $'\177' backward-delete-char   # backspace
 bindkey $'\10'  backward-delete-word   # C-backspace
 
-bindkey -M vicmd ! edit-command-line-tmux
+bindkey -M vicmd ! edit-command-line-split
 
 #unicode input
 autoload -U insert-unicode-char

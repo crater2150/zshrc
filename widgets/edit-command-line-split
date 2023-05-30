@@ -1,13 +1,11 @@
-ECLHEIGHT=${ECLHEIGHT:-5}
 edit-command-line-tmux() {
 	local tmpfile=${TMPPREFIX:-/tmp/zsh}ecl$$
 
 	print -R - "$PREBUFFER$BUFFER" >$tmpfile
 	exec </dev/tty
-	if [ -n "$TMUX" ] && [ "$UID" -ne 0 ]; then
-		tmux splitw -v -l $ECLHEIGHT "vim -c 'set laststatus=0 showtabline=0 ft=zsh' $tmpfile"
-		pid=$(ps -ef | awk "/[0-9] vim.*${tmpfile:t}/ { print \$2 }")
-		wait_on_pid $pid
+	if [[ $KITTY_WINDOW_ID ]]; then
+		kitty @launch --type overlay vim -c 'set laststatus=0 showtabline=0 ft=zsh' $tmpfile
+		tail -f --pid=$(pgrep -f "vim.*${tmpfile:t}") /dev/null
 	else
 		${=${VISUAL:-${EDITOR:-vi}}} $tmpfile
 	fi
