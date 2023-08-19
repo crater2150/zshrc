@@ -23,11 +23,11 @@ xqn() {
 alias xfiles="xbps-query -f"
 
 xbps-install() {
-	sudo script --return --quiet -c "/usr/bin/xbps-install $*" /dev/null \
-		| tee /dev/stderr \
-		| grep -oP ".*(?=: post-install message)" \
+	local logfile=$(mktemp)
+	sudo script --return --quiet -c "/usr/bin/xbps-install $*" $logfile
+	local ret=$?
+	grep -oP ".*(?=: post-install message)" < $logfile \
 		| ifne xargs -L 1 xbps-query -p install-msg
-	ret=$?
 	hash -r
 	return $ret
 }
@@ -52,11 +52,13 @@ xowner() {
 
 sv() {
 	command sv "$@"
+	ret=$?
 	if [[ "$1" == "up" ]]; then
 		shift
 		sleep 0.5
 		command sv check "$@"
 	fi
+	return $ret
 }
 
 sv-manage() {
