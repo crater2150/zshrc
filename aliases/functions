@@ -29,11 +29,15 @@ alias sudo="sudo "
 alias S='sudo $(history -n -1)'
 
 alias rm="rm -I"
-function v() {
-    for file in $@; do
-	xdg-open $file &|
-    done
-}
+if exists rifle; then
+    alias v=rifle
+else
+    function v() {
+	for file in $@; do
+	    xdg-open $file &|
+	done
+    }
+fi
 
 alias vmemcache="vmtouch -l -m 12G -v"
 
