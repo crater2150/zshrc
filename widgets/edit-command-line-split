@@ -1,16 +1,16 @@
-edit-command-line-tmux() {
-	local tmpfile=${TMPPREFIX:-/tmp/zsh}ecl$$
+local tmpfile=${TMPPREFIX:-/tmp/zsh}ecl$$
 
-	print -R - "$PREBUFFER$BUFFER" >$tmpfile
-	exec </dev/tty
-	if [[ $KITTY_WINDOW_ID ]]; then
-		kitty @launch --type overlay vim -c 'set laststatus=0 showtabline=0 ft=zsh' $tmpfile
-		tail -f --pid=$(pgrep -f "vim.*${tmpfile:t}") /dev/null
-	else
-		${=${VISUAL:-${EDITOR:-vi}}} $tmpfile
-	fi
-	print -Rz - "$(<$tmpfile)" 
+print -R - "$PREBUFFER$BUFFER" >$tmpfile
+exec </dev/tty
+if [[ $KITTY_WINDOW_ID ]]; then
+	kitty @launch --type overlay vim -c 'set laststatus=0 showtabline=0 ft=zsh' $tmpfile
+	tail -f --pid=$(pgrep -f "vim.*${tmpfile}") /dev/null &> /dev/null
+else
+	${=${VISUAL:-${EDITOR:-vi}}} $tmpfile
+fi
+print -Rz - "$(<$tmpfile)"
 
-	command rm -f $tmpfile
-	zle send-break		# Force reload from the buffer stack
-}
+command rm -f $tmpfile
+zle send-break		# Force reload from the buffer stack
+
+# vim:ft=zsh

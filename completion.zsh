@@ -1,5 +1,5 @@
 # autoload completions
-fpath=( "${ZDOTDIR:+$ZDOTDIR/compdef}" "/etc/zsh/compdef" $fpath )
+fpath=( "${XDG_DATA_HOME:-$HOME/.local/share}/zsh/site-functions" "${ZDOTDIR:+$ZDOTDIR/compdef}" "/etc/zsh/compdef" $fpath )
 fpath=("$XDG_DATA_HOME/scalacli/completions/zsh" $fpath)
 
 [[ -n $(echo /etc/zsh/compdef/*(N:t)) ]] && autoload -U /etc/zsh/compdef/*(N:t)
@@ -21,13 +21,13 @@ autoload -U +X bashcompinit && bashcompinit
 zstyle ':completion:*:descriptions' format ‘%B%d%b’
 zstyle ':completion:*:messages' format ‘%d’
 zstyle ':completion:*:warnings' format ‘No matches for: %d’
-zstyle ':completion:*' use-cache on                                       
+zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.cache/zsh
-zstyle ':completion:*' completer _complete _ignored _match _approximate _correct 
+zstyle ':completion:*' completer _complete _ignored _match _approximate _correct
 zstyle ':completion:*:match:*' original only
 zstyle ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3))numeric)'
 zstyle ':completion:*:functions' ignored-patterns '_*'
-zstyle ':completion:*' squeeze-slashes true                           
+zstyle ':completion:*' squeeze-slashes true
 zstyle ':completion:*' expand prefix suffix
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}

@@ -32,6 +32,8 @@ bindkey " "     magic-space            # Do history expansion on space.
 bindkey $'\177' backward-delete-char   # backspace
 bindkey $'\10'  backward-delete-word   # C-backspace
 
+autoload -U edit-command-line-split
+zle -N edit-command-line-split
 bindkey -M vicmd ! edit-command-line-split
 
 #unicode input
@@ -55,7 +57,7 @@ local function zle-line-finish () {
     echoti rmkx 2> /dev/null
 }
 zle -N zle-line-init
-zle -N zle-line-finish  
+zle -N zle-line-finish
 
 insert_sudo () { LBUFFER="sudo ${LBUFFER}" }
 zle -N insert-sudo insert_sudo
