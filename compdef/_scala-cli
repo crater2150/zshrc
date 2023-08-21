@@ -1,5 +1,4 @@
 #compdef _scala-cli scala-cli
-typeset -A opt_args
 
 function _scala-cli {
   eval "$(scala-cli complete zsh-v1 $CURRENT $words[@])"

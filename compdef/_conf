@@ -1,3 +1,11 @@
 #compdef conf
 
-_arguments "1:Commands:(${(k)conf_locations})"
+
+_conf_locations() {
+	_alternative \
+		"configs:Configs:(${(k)conf_locations})" \
+		"dirs:XDG configs:_files -/ -W ${XDG_CONFIG_HOME:-$HOME/.config}/ -S '' -F '*/*'"
+}
+
+
+_conf_locations

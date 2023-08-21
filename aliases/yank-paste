@@ -1,0 +1,70 @@
+typeset -a __yank_buffer __cut_buffer
+fyank() {
+	__yank_buffer=()
+	for i in "$@"; do
+		__yank_buffer+=("${i:a}")
+	done
+}
+
+fcut() {
+	__cut_buffer=()
+	for i in "$@"; do
+		__cut_buffer+=("${i:a}")
+	done
+}
+
+fyankadd() {
+	for i in "$@"; do
+		__yank_buffer+=("${i:a}")
+	done
+}
+
+fcutadd() {
+	for i in "$@"; do
+		__cut_buffer+=("${i:a}")
+	done
+}
+
+fpasteclear() {
+	__yank_buffer=()
+	__cut_buffer=()
+}
+
+fpastelist() {
+	if [[ -n $__yank_buffer ]]; then
+		echo "Copying ${#__yank_buffer[@]} files:"
+		printf "  %s\n" ${__yank_buffer[@]}
+	fi
+	if [[ -n $__cut_buffer ]]; then
+		echo "Moving ${#__cut_buffer[@]} files"
+		printf "  %s\n" ${__cut_buffer[@]}
+	fi
+}
+
+fpaste() {
+	if [[ -n $__yank_buffer ]]; then
+		echo "Copying ${#__yank_buffer[@]} files"
+	fi
+	if [[ -n $__cut_buffer ]]; then
+		echo "Moving ${#__cut_buffer[@]} files"
+	fi
+	if [[ -n $__cut_buffer || -n $__yank_buffer ]]; then
+		echo -n "Continue? [y/N] "
+		read -q || return
+	else
+		echo "Error: No files to paste. Use fyank or fcut first"
+		return 1
+	fi
+
+	local target=${1:-$PWD}
+	for file in "${__yank_buffer[@]}"; do
+		cp -r "$file" "$target"
+	done
+	for file in "${__cut_buffer[@]}"; do
+		mv "$file" "$target"
+	done
+	
+	fpasteclear
+}
+
+# vim: set ft=zsh:
