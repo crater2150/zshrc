@@ -8,7 +8,7 @@ unsetopt histsavenodups
 
 setopt autocd extendedglob notify correct autonamedirs
 setopt list_ambiguous autopushd  pushd_ignore_dups
-setopt hist_ignore_space share_history 
+setopt hist_ignore_space share_history
 #setopt hist_ignore_all_dups
 setopt no_auto_remove_slash auto_param_slash
 setopt completeinword
@@ -110,3 +110,4 @@ if exists mail; then
     }
     __chromaz_extra_left+=_prompt_cron_mails
 fi
+tabs -4
